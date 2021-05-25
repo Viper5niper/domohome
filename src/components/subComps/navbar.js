@@ -1,0 +1,67 @@
+import React, { useContext, useEffect } from 'react';
+import { Link } from 'react-router-dom';
+import { AuthContext } from '../../context/authContext';
+
+import M from "materialize-css";
+
+
+const NavBar = props => {
+
+  const { user, extra } = useContext(AuthContext);
+
+  useEffect(() => {
+    var elems = document.querySelectorAll('.sidenav');  //inicializamos la navbar
+    M.Sidenav.init(elems);
+  }, []);
+
+  const sideLogo = () => {
+    return (
+      <li>
+        <div>
+          <img alt="lol" src="../img/logo.svg" style={{ marginTop: '6%', marginLeft: '29%' }} width="35%" height="100%" />
+        </div>
+      </li>
+    );
+  }
+
+  const sideLink = (props) => {
+    return (<li><Link style={{ color: 'white' }} className="waves-effect" to={props.to}>
+      <i style={{ color: 'white' }} className="small material-icons">{props.iconname}</i>
+      {props.caption}</Link></li>);
+  }
+
+  const userNav = () => {
+    return (
+      <>
+        {sideLogo()}
+        <li>
+          <div className="divider" />
+        </li>
+        {sideLink({ to: "/", iconname: "home", caption: "Inicio" })}
+        {sideLink({ to: "/StudentDocs", iconname: "folder", caption: "busca esto en" })}
+        {sideLink({ to: "/Users", iconname: "person", caption: "subcomps navbar" })}
+        {sideLink({ to: "/Grupos", iconname: "group", caption: "caption cambia el texto" })}
+        {sideLink({ to: "/API", iconname: "description", caption: "iconname cambia el icono" })}
+        {sideLink({ to: "/CEF", iconname: "description", caption: "ruta te lo explico luego" })}
+      </>
+    )
+  }
+
+  const renderSideNav = (tipo) => {
+    switch (tipo) {
+      case 'user':
+        return userNav();
+      default:
+        return 'revisa el tipo recibido';
+    }
+  }
+
+  return (
+    <ul id="slide-out" className="sidenav ues">
+      { renderSideNav(user.Type)}
+    </ul>
+  )
+
+}
+
+export default NavBar;

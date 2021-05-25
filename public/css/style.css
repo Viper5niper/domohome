@@ -1,0 +1,208 @@
+/* Custom Stylesheet */
+/**
+ * Use this file to override Materialize files so you can update
+ * the core Materialize files in the future
+ *
+ * Made By MaterializeCSS.com
+ */
+
+:root {
+  --main-loader: url(../img/Preloader_10.gif) center no-repeat #fff;
+}
+
+.ues {
+  background-color: #aa0000 !important;
+}
+
+.darkUes {
+  background-color: #62000F !important;
+}
+
+.dropdown-content {
+  max-height: 250px !important;
+  overflow-y: auto !important;
+  backface-visibility: hidden !important;
+}
+
+.icon-block {
+  padding: 0 15px;
+}
+.icon-block .material-icons {
+	font-size: inherit;
+}
+
+#toast-container {
+  top: auto !important;
+  right: auto !important;
+  bottom: 10%;
+  left:7%;  
+}
+
+.no-js #loader { display: none;  }
+.js #loader { display: block; position: absolute; left: 100px; top: 0; }
+.se-pre-con {
+  position: fixed;
+  left: 0px;
+  top: 0px;
+  width: 100%;
+  height: 100%;
+  z-index: 9999;
+  background: var(--main-loader);
+  
+}
+
+.fade-out-pre {
+  transition : fade 0.9s ease-in;
+}
+
+.lightLoader{
+
+background: url(../img/Preloader_10.gif) center no-repeat #fff;
+
+}
+
+.darkLoader{
+
+  background: url(../img/darkPreloader.gif) center no-repeat #000 !important;
+
+}
+
+/* Drop downs
+.dropdown-content{
+  background-color: #aa0000 !important;
+}
+
+.dropdown-content li > a, .dropdown-content li > span {
+    color: white !important;
+}
+
+.dropdown-content li:hover, .dropdown-content li.active {
+  background-color: #A10000 !important;
+}
+
+.dropdown-content{
+  width: max-content !important;
+  height:auto !important;
+}*/
+
+
+.wrapper {
+  padding-left: 240px;
+}
+
+@media only screen and (max-width : 992px) {
+  .wrapper {
+    padding-left: 0;
+  }
+}
+
+.lightTheme{
+
+  background-color: #f9fbe7;
+
+  /**/transition:all 0.5s;/**/
+
+}
+
+.darkTheme{
+
+  color: #E8E8E8;
+  background-color: #131313;
+
+  /**/transition:all 0.5s;/**/
+
+}
+
+.darkCard{
+
+  color: #E8E8E8;
+  background-color: #1D1D1D !important;/*#f9fbe7;*/
+
+  /**/transition:all 0.5s;
+
+}
+
+.darkText{
+
+  color: #E8E8E8;
+
+}
+
+.collapsible-header{
+  border-bottom: 1px solid #ddd !important;
+}
+
+.popup{
+    position:absolute;
+    width:30%;
+    height:30%;
+}
+
+.infoanchor{
+
+  color: white;
+  
+}
+
+.progress {/* para las barras de progreso del menu de inicio */
+  min-height: 36px;
+  overflow: hidden;
+  position: relative;
+}
+
+.progress > span {
+  position: relative;
+  float:left;
+  color: #fff;
+  padding: 8px;
+  z-index: 99;
+}
+
+/* .indexPanel{
+  padding-top : 8px;
+} */
+
+/*para hacer responsivas las cards */
+div.card-container {
+  -moz-column-width: 23rem;
+  -webkit-column-width: 23rem;
+  -moz-column-gap: 1rem;
+  -webkit-column-gap: 1rem;
+}
+
+.card-panel {
+  display: inline-block;
+  width:  100%;
+}
+
+/* para que los iconos se alineen al texto */
+.inline-icon {
+  vertical-align: bottom;
+  font-size: 24px !important;
+}
+
+/* fondo de pantalla pixelado de la pagina de inicio*/
+.pixelBG {
+  position:fixed;
+  padding:0;
+  margin:0;
+
+  top:0;
+  left:0;
+
+  width: 100%;
+  height: 100%;
+  background-image: url("../img/dark-geometric.png");
+  background-color: red;
+  height: 100%;
+  }
+
+  /* para que el preloader de materialize se centre */
+  .loader {
+    position: absolute;
+    margin: auto;
+    top: 50vh;
+    bottom: 50vh;
+    left: 0;
+    right: 0;
+  }
