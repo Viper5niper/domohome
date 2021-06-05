@@ -1,7 +1,7 @@
 import React, { useContext, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { AuthContext } from '../../context/authContext';
-
+import defaultImg from '../../img/domotica.png'
 import M from "materialize-css";
 
 
@@ -18,7 +18,7 @@ const NavBar = props => {
     return (
       <li>
         <div>
-          <img alt="lol" src="../img/logo.svg" style={{ marginTop: '6%', marginLeft: '29%' }} width="35%" height="100%" />
+          <img  src={defaultImg} style={{ marginTop: '6%', marginLeft: '29%' }} width="35%" height="100%" />
         </div>
       </li>
     );
@@ -38,8 +38,8 @@ const NavBar = props => {
           <div className="divider" />
         </li>
         {sideLink({ to: "/", iconname: "home", caption: "Inicio" })}
-        {sideLink({ to: "/StudentDocs", iconname: "folder", caption: "busca esto en" })}
-        {sideLink({ to: "/Users", iconname: "person", caption: "subcomps navbar" })}
+        {sideLink({ to: "/LucyVen", iconname: "tungsten", caption: "Luces y Ventilacion" })}
+        {sideLink({ to: "/Security", iconname: "security", caption: "Seguridad" })}
         {sideLink({ to: "/Grupos", iconname: "group", caption: "caption cambia el texto" })}
         {sideLink({ to: "/API", iconname: "description", caption: "iconname cambia el icono" })}
         {sideLink({ to: "/CEF", iconname: "description", caption: "ruta te lo explico luego" })}
@@ -57,7 +57,7 @@ const NavBar = props => {
   }
 
   return (
-    <ul id="slide-out" className="sidenav ues">
+    <ul id="slide-out" className="sidenav indigo darken-1">
       { renderSideNav(user.Type)}
     </ul>
   )
