@@ -5790,7 +5790,7 @@ body.keyboard-focused .dropdown-content li:focus {
 }
 
 .modal .modal-content {
-  padding: 24px;
+  padding: 200px;
 }
 
 .modal .modal-close {
@@ -8734,7 +8734,7 @@ input[type=range]::-ms-thumb {
   -webkit-flex: 1 auto;
       -ms-flex: 1 auto;
           flex: 1 auto;
-  background-color: #26a69a;
+  background-color: #3949ab;
   color: #fff;
   padding: 20px 22px;
   font-weight: 500;
@@ -8792,11 +8792,11 @@ input[type=range]::-ms-thumb {
 }
 
 .datepicker-table td.is-today {
-  color: #26a69a;
+  color: #3949ab;
 }
 
 .datepicker-table td.is-selected {
-  background-color: #26a69a;
+  background-color: #3949ab;
   color: #fff;
 }
 
@@ -8905,7 +8905,7 @@ input[type=range]::-ms-thumb {
   -webkit-flex: 1 auto;
       -ms-flex: 1 auto;
           flex: 1 auto;
-  background-color: #26a69a;
+  background-color: #3949ab;
   padding: 10px;
   font-weight: 300;
 }
@@ -8996,7 +8996,7 @@ input[type=range]::-ms-thumb {
 
 .timepicker-tick.active,
 .timepicker-tick:hover {
-  background-color: rgba(38, 166, 154, 0.25);
+  background-color: #8c9eff;
 }
 
 .timepicker-dial {
@@ -9026,7 +9026,7 @@ input[type=range]::-ms-thumb {
 }
 
 .timepicker-canvas line {
-  stroke: #26a69a;
+  stroke: #3949ab;
   stroke-width: 4;
   stroke-linecap: round;
 }
@@ -9042,7 +9042,7 @@ input[type=range]::-ms-thumb {
 
 .timepicker-canvas-bg {
   stroke: none;
-  fill: #26a69a;
+  fill: #3949ab;
 }
 
 /* Footer */
@@ -9064,7 +9064,7 @@ input[type=range]::-ms-thumb {
 }
 
 .timepicker-close {
-  color: #26a69a;
+  color: #3949ab;
 }
 
 .timepicker-clear,
