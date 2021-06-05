@@ -13,6 +13,8 @@ import NavBar from './components/subComps/navbar';
 
 /* ------ inicio ------ */
 import Home from './components/home';// aca se encuentran los 4 inicios
+import LucesVen from './components/lucesven';
+import Security from './components/seguridad';
 import Login from './components/login';
 
 //import InfoUser from './components/global/infoUser';
@@ -34,6 +36,8 @@ function App() {
 
       {/* ---- Inicio ------ */}
       <Route exact path="/" component={Home}/>
+      <Route exact path="/LucyVen" component={LucesVen}/>
+      <Route exact path="/Security" component={Security}/>
       <PublicRoute path="/Login" component={Login}/>
 
       <Redirect to="/"/> {/* para redireccionar cualquier otra ruta a la pagina de inicio*/}
