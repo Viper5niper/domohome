@@ -44,10 +44,10 @@ const TopBar = props => {
     return(
       <header>
       <nav>
-        <div className="nav-wrapper ues">
+        <div className="nav-wrapper  indigo darken-1">
           <a href="#!" data-target="slide-out" className="sidenav-trigger show-on-large"><i className="material-icons">menu</i></a>
           <div className="hide-on-med-and-down">
-            <a href="#!" className="brand-logo center">UES-FMO Tesis Manager</a>
+            <a href="#!" className="brand-logo center">Domotica Con Proteus</a>
           </div>
           <ul className="right">
             <li><a href="#!" id="dark_mode">
