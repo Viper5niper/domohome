@@ -3,8 +3,7 @@ import React, {useContext, useEffect} from 'react';
 
 
 import {AuthContext} from '../context/authContext';
-import defaultGif from '../img/foco.gif';
-import Luces from './homeSubComps/luces'
+
 
 const Home = () => {
 
