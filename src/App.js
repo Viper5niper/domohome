@@ -14,6 +14,7 @@ import NavBar from './components/subComps/navbar';
 /* ------ inicio ------ */
 import Home from './components/home';// aca se encuentran los 4 inicios
 import LucesVen from './components/lucesven';
+import Sprinkler from './components/aspersores';
 import Security from './components/seguridad';
 import Login from './components/login';
 
@@ -37,6 +38,7 @@ function App() {
       {/* ---- Inicio ------ */}
       <Route exact path="/" component={Home}/>
       <Route exact path="/LucyVen" component={LucesVen}/>
+      <Route exact path="/Sprinkler" component={Sprinkler}/>
       <Route exact path="/Security" component={Security}/>
       <PublicRoute path="/Login" component={Login}/>
 
