@@ -39,8 +39,8 @@ const NavBar = props => {
         </li>
         {sideLink({ to: "/", iconname: "home", caption: "Inicio" })}
         {sideLink({ to: "/LucyVen", iconname: "tungsten", caption: "Luces y Ventilacion" })}
+        {sideLink({ to: "/Sprinkler", iconname: "shower", caption: "Aspersores" })}
         {sideLink({ to: "/Security", iconname: "security", caption: "Seguridad" })}
-        {sideLink({ to: "/Grupos", iconname: "group", caption: "caption cambia el texto" })}
         {sideLink({ to: "/API", iconname: "description", caption: "iconname cambia el icono" })}
         {sideLink({ to: "/CEF", iconname: "description", caption: "ruta te lo explico luego" })}
       </>
