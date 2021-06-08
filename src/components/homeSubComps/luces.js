@@ -7,7 +7,7 @@ import focoOff from '../homeSubComps/img/light-off.png';
 import fanOn from '../homeSubComps/img/fan-on.png';
 import fanOff from '../homeSubComps/img/fan-off.png';
 
-import defaultGif2 from '../homeSubComps/img/ventilacion.gif';
+
 import M from "materialize-css";
 import Modal from './modaluzv';
 
@@ -66,7 +66,13 @@ const Luces = props => {
   useEffect(() => {
       //setELuces(arrLuces);
       console.log("la ventaja de crear el componente a parte es que podes hacer funciones especificas para ese componente. Por ejemplo, aca cuando se cargue (useEffect) puedo hacer que tire este console log y no hace bulto en el componente principal (home). Lo mismo podes hacer cuando se le da click al componente. Fijate que cuando pasas el mouse encima solo cambia de color el muy subcomponente y no todo el componente principal que conforma a home, aca podes ver el codigo de como se hizo eso");
-  },[]);
+      var el = document.querySelector('.modal');
+      M.Modal.init(el, {});
+      el = document.querySelector('.datepicker');
+      M.Datepicker.init(el,{});
+      el = document.querySelector('.timepicker');
+      M.Timepicker.init(el,{});
+    },[]);
 
   const mouseEntro = () => {
     setHover(true); //lo ponemos al contrario de como estava
@@ -98,6 +104,30 @@ const Luces = props => {
 
   }
   
+  const ModalProgramar= () =>{
+    var clase = {}
+    return(
+      
+    <div id="modal1" className="modal" style={{maxHeight : '90%', height : '70%'}}>
+    <div className="modal-content">
+    <div class="row">
+
+        <blockquote>Elija la fecha y hora en que desea programar el evento</blockquote>
+
+        <div class="input-field col s12">
+          <input id="hora" type="text" className="timepicker"/>
+          <label for="hora">Programar Hora De Encendido/Apagado</label>
+        </div>
+        <div class="input-field col s12">
+          <input id="fecha" type="text" className="datepicker"/>
+          <label for="fecha">Programar Fecha De Encendido/Apagado</label>
+        </div>
+    </div>
+    </div>
+  </div>
+    )
+  }
+
   const Luz = (props) => {
 
     return(
@@ -117,7 +147,11 @@ const Luces = props => {
                   </label>
                 </div>
                 <br/>
-                  <Modal/>
+                <a class="waves-effect blue darken-4 btn modal-trigger" href="#modal1">
+                {props.name}
+                <i class="material-icons left">watch_later</i>
+                </a>
+
                 </div>
               </div>
             </div>
@@ -144,7 +178,10 @@ const Luces = props => {
                 </div>
 
                 <br/>
-                <Modal/>
+                <a class="waves-effect blue darken-4 btn modal-trigger" href="#modal1">
+                {props.name}
+                <i class="material-icons left">watch_later</i>
+                </a>
                 </div>
               </div>
             </div>
@@ -159,25 +196,19 @@ const Luces = props => {
           {Luz({name : "Cochera", id: "LG", tam: "col s6 m4"})}
           {Luz({name : "Comedor", id: "LC", tam: "col s6 m4"})}
           {Luz({name : "Sala", id: "LS", tam: "col s6 m4"})}
-  
           {Luz({name : "Patio", id: "LP", tam: "col s6 m4 offset-m2"})}
           {Luz({name : "Entrada", id: "LE", tam: "col s6 m4"})}
 
       </div>
       
       <div className="col s6">
-
           {Luz({name : "Cuarto 1", id: "LA" , tam: "col s6 m4 offset-m4"})}
-        
           {Fan({name : "Cuarto 1", id: "VA", tam: "col s6 m4"})}
-
           {Luz({name : "Cuarto 2", id: "LB", tam: "col s6 m4 offset-m4"})}
-        
           {Fan({name : "Cuarto 2", id: "VB", tam: "col s6 m4"})}
-
       </div>
     </div>
-
+      {ModalProgramar()}
      </>
     )
 
