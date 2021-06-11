@@ -2,7 +2,7 @@ import React, {useContext} from 'react';
 import {BrowserRouter as Router, Route, Redirect} from 'react-router-dom';
 
 /* -------- componentes de orden mayor ---------- */
-//import PrivateRoute from './HO_components/privateRoute';
+import PrivateRoute from './HO_components/privateRoute';
 import PublicRoute from './HO_components/publicRoute';
 
 import {AuthContext} from './context/authContext';
@@ -13,7 +13,7 @@ import NavBar from './components/subComps/navbar';
 
 /* ------ inicio ------ */
 import Home from './components/home';// aca se encuentran los 4 inicios
-import LucesVen from './components/lucesven';
+import Luces from './components/luces';
 import Sprinkler from './components/aspersores';
 import Security from './components/seguridad';
 import Login from './components/login';
@@ -37,10 +37,10 @@ function App() {
 
       {/* ---- Inicio ------ */}
       <Route exact path="/" component={Home}/>
-      <Route exact path="/LucyVen" component={LucesVen}/>
-      <Route exact path="/Sprinkler" component={Sprinkler}/>
-      <Route exact path="/Security" component={Security}/>
-      <PublicRoute path="/Login" component={Login}/>
+      <PrivateRoute exact path="/LucyVen" roles={["user"]} component={Luces}/>
+      <PrivateRoute exact path="/Sprinkler" roles={["user"]} component={Sprinkler}/>
+      <PrivateRoute exact path="/Security" roles={["user"]} component={Security}/>
+      <PublicRoute path="/Login" roles={["user"]} component={Login}/>
 
       <Redirect to="/"/> {/* para redireccionar cualquier otra ruta a la pagina de inicio*/}
       

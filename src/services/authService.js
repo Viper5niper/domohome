@@ -7,7 +7,7 @@ const baseUrl = Config.local;
 export default {
 
     login : user => {
-        return fetch(baseUrl + '/usuarios/login',
+        return fetch(baseUrl + '/users/login',
         {
             method : "POST",
             body : JSON.stringify(user),
@@ -32,19 +32,7 @@ export default {
     },
 
     isAuth : async ()=> {
-            return {
-                user: {
-                    Codigo : "ELPP",
-                    Nombres : "Pepe tonio celedonio",
-                    Type : "user"
-                },
-                extra: {
-
-                },
-                isAuth : true
-            }
-        /*
-        return fetch(baseUrl + '/usuarios/checkAuth',
+        return fetch(baseUrl + 'checkAuth',
         {
             headers: {
             'Authorization': localStorage.getItem('token')
@@ -56,6 +44,21 @@ export default {
             else{ return res.json().then(data => data);}
         })/**/
     }
+
+    /*
+      return {
+                user: {
+                    Codigo : "ELPP",
+                    Nombres : "Pepe tonio celedonio",
+                    Type : "user"
+                },
+                extra: {
+
+                },
+                isAuth : true
+            }
+        
+            */
 
 
 }

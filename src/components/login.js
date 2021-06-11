@@ -10,7 +10,7 @@ import InputItem from "./subComps/inputitem";//
 
 const Login = (props) => {
 
-    const [user,setUser] = useState({Codigo : "", Password : ""});
+    const [user,setUser] = useState({username : "", password : ""});
     const [log,setlog] = useState(false);
     //const [message,setMessage] = useState(null);
     const authContext = useContext(AuthContext);
@@ -55,12 +55,12 @@ const Login = (props) => {
                 <h4>INGRESAR</h4>
                 <center>
                 <div className="row">
-                <InputItem name="Codigo" caption="Usuario" onInputChange={onInputChange}
+                <InputItem name="username" caption="Usuario" onInputChange={onInputChange}
                 iconname="account_circle" info="Ejemplo: AA18004 (estudiante), DOC-12345678-9 (docente)"/>
                 </div></center>
                 <center>
                 <div className="row">
-                <InputItem name="Password" caption="Contraseña" onInputChange={onInputChange}
+                <InputItem name="password" caption="Contraseña" onInputChange={onInputChange}
                 iconname="https" info="Ejemplo: AA18004 (estudiante), DOC-12345678-9 (docente)"/>
                 </div></center>
                 <button className="btn waves-effect waves-light red darken-2" type="submit" name="action">Ingresar

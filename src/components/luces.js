@@ -1,15 +1,18 @@
-import React, {useState, useEffect} from 'react';
+import React, {useState, useEffect, useContext} from 'react';
 
+import lucesService from '../services/lucesService';
+import {AuthContext} from '../context/authContext';
 
-import focoOn from '../homeSubComps/img/light-on.png';
-import focoOff from '../homeSubComps/img/light-off.png';
+import Loader from './subComps/loader';
 
-import fanOn from '../homeSubComps/img/fan-on.png';
-import fanOff from '../homeSubComps/img/fan-off.png';
+import focoOn from './img/light-on.png';
+import focoOff from './img/light-off.png';
+
+import fanOn from './img/fan-on.png';
+import fanOff from './img/fan-off.png';
 
 
 import M from "materialize-css";
-import Modal from './modaluzv';
 
 const arrFans = {
 
@@ -59,19 +62,36 @@ const arrLuces = {
 
 const Luces = props => {
 
+  //const {isLoaded, setIsLoaded} = useContext(AuthContext);
+
   const [hover, setHover] = useState(false);
   const [eLuces, setELuces] = useState(arrLuces);
   const [eFans, setEFans] = useState(arrFans);
+  const [l, setL] = useState(false);
 
   useEffect(() => {
-      //setELuces(arrLuces);
-      console.log("la ventaja de crear el componente a parte es que podes hacer funciones especificas para ese componente. Por ejemplo, aca cuando se cargue (useEffect) puedo hacer que tire este console log y no hace bulto en el componente principal (home). Lo mismo podes hacer cuando se le da click al componente. Fijate que cuando pasas el mouse encima solo cambia de color el muy subcomponente y no todo el componente principal que conforma a home, aca podes ver el codigo de como se hizo eso");
+
+      lucesService.get().then( res =>{
+
+        if(res.error){
+
+          console.log(res.data);
+          //setELuces(res.data);
+          setL(true);
+          
+        }
+
+      });
+
       var el = document.querySelector('.modal');
       M.Modal.init(el, {});
       el = document.querySelector('.datepicker');
       M.Datepicker.init(el,{});
       el = document.querySelector('.timepicker');
       M.Timepicker.init(el,{});
+
+
+
     },[]);
 
   const mouseEntro = () => {
@@ -141,7 +161,8 @@ const Luces = props => {
                 <div class="switch">
                   <label>
                     OFF
-                    <input name={props.id} type="checkbox" onChange={changeLight}/>
+                    <input name={props.id} type="checkbox" onChange={changeLight}
+                    checked={eLuces[props.id].Encendido}/>
                     <span class="lever"></span>
                     ON
                   </label>
@@ -171,7 +192,8 @@ const Luces = props => {
                 <div class="switch">
                   <label>
                     OFF
-                    <input name={props.id} type="checkbox" onChange={changeFan}/>
+                    <input name={props.id} type="checkbox" onChange={changeFan}
+                    checked={eFans[props.id].Encendido}/>
                     <span class="lever"></span>
                     ON
                   </label>
@@ -189,6 +211,7 @@ const Luces = props => {
   }
 
     return(<>
+      {!l ? <Loader/> :
       <div className="row">
 
       <div className="col s6">
@@ -207,8 +230,9 @@ const Luces = props => {
           {Luz({name : "Cuarto 2", id: "LB", tam: "col s6 m4 offset-m4"})}
           {Fan({name : "Cuarto 2", id: "VB", tam: "col s6 m4"})}
       </div>
-    </div>
       {ModalProgramar()}
+    </div>
+    }
      </>
     )
 
