@@ -63,7 +63,7 @@ const Login = (props) => {
                 <InputItem name="password" caption="Contraseña" onInputChange={onInputChange}
                 iconname="https" info="Ejemplo: AA18004 (estudiante), DOC-12345678-9 (docente)"/>
                 </div></center>
-                <button className="btn waves-effect waves-light red darken-2" type="submit" name="action">Ingresar
+                <button className="btn waves-effect waves-light indigo darken-1" type="submit" name="action">Ingresar
                 <i className="material-icons right">arrow_forward_ios</i></button>
                 <div style={{display: '-webkit-inline-box'}}>
                 </div>
@@ -84,7 +84,7 @@ const Login = (props) => {
     }
 
     return(
-        <div className="pixelBG">
+        <div className="pixelBG indigo darken-1">
         <form onSubmit={onLoginSubmit}>
         <center>
         <div className="row" id="container" style={{marginTop: '5%', marginLeft: '32%'}}>
