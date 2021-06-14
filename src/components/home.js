@@ -33,7 +33,7 @@ const Home = () => {
     const AuthHome = (tipo) => {
       return(<>
       <div className="row">
-        <div className="col s12 m12 l12">
+        <div className="col s12">
           <div className="card white">
             <div className="card-content black-text">
               <h1>holaaaa</h1>

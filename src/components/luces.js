@@ -73,22 +73,24 @@ const Luces = props => {
 
       lucesService.get().then( res =>{
 
-        if(res.error){
+        if(!res.error){
 
           console.log(res.data);
           //setELuces(res.data);
           setL(true);
           
+          var el = document.querySelector('.modal');
+          M.Modal.init(el, {});
+          el = document.querySelector('.datepicker');
+          M.Datepicker.init(el,{});
+          el = document.querySelector('.timepicker');
+          M.Timepicker.init(el,{});
+
         }
 
       });
 
-      var el = document.querySelector('.modal');
-      M.Modal.init(el, {});
-      el = document.querySelector('.datepicker');
-      M.Datepicker.init(el,{});
-      el = document.querySelector('.timepicker');
-      M.Timepicker.init(el,{});
+      
 
 
 
