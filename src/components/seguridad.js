@@ -5,6 +5,8 @@ import garageOn from './img/cochera.jpg';
 import garageOff from './img/cochera-open.jpg';
 import entradaOn from './img/door.jpg';
 import entradaOff from './img/door-close.jpg';
+import patioOn from './img/patio-open.jpg';
+import patioOff from './img/patio-close.jpg';
 import ReactCodeInput from 'react-verification-code-input';
 
 import M from "materialize-css";
@@ -90,8 +92,15 @@ const Unlock = props => {
                   <img className="responsive-img" src={eCochera[props.id].Encendido ? garageOff : garageOn}/>
                 </div>
                 <div className="card-content center-align">
-                <br/>
-                  <ReactCodeInput fields={4} fieldWidth="58px"/>
+                <div class="switch">
+                  <label>
+                    OFF
+                    <input name={props.id} type="checkbox" onChange={changeCochera}
+                    checked={eCochera[props.id].Encendido}/>
+                    <span class="lever"></span>
+                    ON
+                  </label>
+                </div>
                 </div>
               </div>
             </div>
@@ -107,11 +116,27 @@ const Unlock = props => {
                   <img className="responsive-img" src={eEntrada[props.id].Encendido ? entradaOn : entradaOff}/>
                 </div>
                 <div className="card-content center-align">
+                  <ReactCodeInput fields={4} fieldWidth="58px"/>
+                </div>
+              </div>
+            </div>
+    )
+  }
 
+  const Patio = (props) => {
+
+    return(
+      <div className={props.tam}>
+              <div className="card">
+                <div className="card-image">
+                  <img className="responsive-img"  src={ePatio[props.id].Encendido ? patioOn : patioOff}/>
+                </div>
+                <div className="card-content center-align">
                 <div class="switch">
                   <label>
                     OFF
-                    <input name={props.id} type="checkbox" onChange={changeEntrada}/>
+                    <input name={props.id} type="checkbox" onChange={changePatio}
+                    checked={ePatio[props.id].Encendido}/>
                     <span class="lever"></span>
                     ON
                   </label>
@@ -127,6 +152,7 @@ const Unlock = props => {
         <div className="col s12">
             {Cochera({name : "Cochera", id: "SG", tam: "col s6 m5"})}
             {Entrada({name : "Entrada", id: "SE", tam: "col s6 m3"})}
+            {Patio({name : "Entrada", id: "SP", tam: "col s6 m4"})}
         </div>
     </div>
 
