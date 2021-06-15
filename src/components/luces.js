@@ -13,6 +13,7 @@ import fanOff from './img/fan-off.png';
 
 
 import M from "materialize-css";
+import ventsService from '../services/ventsService';
 
 const arrFans = {
 
@@ -28,18 +29,45 @@ const arrFans = {
 };
 
 
+const spanishDates = {
+months: ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'],
+monthsShort: ['Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun', 'Jul', 'Ago', 'Sep', 'Oct', 'Nov', 'Dic'],
+weekdaysFull: ['Domingo', 'Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado'],
+weekdaysShort: ['Dom', 'Lun', 'Mar', 'Mié', 'Jue', 'Vie', 'Sáb'],
+  selectMonths: true,
+  selectYears: 100, // Puedes cambiarlo para mostrar más o menos años
+  today: 'Hoy',
+  clear: 'Limpiar',
+  done: 'Ok',
+  labelMonthNext: 'Siguiente mes',
+labelMonthPrev: 'Mes anterior',
+labelMonthSelect: 'Selecciona un mes',
+labelYearSelect: 'Selecciona un año',
+weekdaysAbbrev: ['D','L','M','X','J','V','S'],
+};
+
+var LampOn, LampOff;
+
 const Luces = props => {
 
   //const {isLoaded, setIsLoaded} = useContext(AuthContext);
 
   const [eLuces, setELuces] = useState([]);
-  const [eFans, setEFans] = useState(arrFans);
+  const [eFans, setEFans] = useState([]);
   const [l, setL] = useState(false);
 
 
   useEffect(() => {
+    LampOn = new Audio("./mp3/LampOn.mp3");
+    LampOff = new Audio("./mp3/LampOff.mp3");
 
-      lucesService.get().then( res =>{
+    ventsService.get().then( res =>{ //busqueda de vents
+
+      if(!res.error){
+
+      setEFans(res.data);
+
+      lucesService.get().then( res =>{ //busqueda de luces
 
         if(!res.error){
 
@@ -50,13 +78,15 @@ const Luces = props => {
           var el = document.querySelector('.modal');
           M.Modal.init(el, {});
           el = document.querySelector('.datepicker');
-          M.Datepicker.init(el,{});
+          M.Datepicker.init(el,{ defaultDate : Date.now(), setDefaultDate : true, i18n : spanishDates});
           el = document.querySelector('.timepicker');
           M.Timepicker.init(el,{});
 
         }
 
       });
+
+    }});//fin busqueda de vents
 
     },[]);
 
@@ -65,6 +95,8 @@ const Luces = props => {
     e.preventDefault();
     e.stopPropagation();
 
+    e.target.checked ? LampOn.play() : LampOff.play();
+
     lucesService.control(e.target.name, e.target.checked ? 'E' : 'A')
     .then( res => {
 
@@ -72,7 +104,7 @@ const Luces = props => {
 
         let filtered = eLuces.filter( item => item.dkey !== res.newState.dkey );
         
-        setELuces([...filtered, res.newState]);
+        setELuces([...filtered, res.newState]);//new state es el nuevo estado del foco devuelto por la api
         
       }
 
@@ -83,34 +115,59 @@ const Luces = props => {
   }
 
   const changeFan = (e) => {
-    //console.log(e.target.name , e.target.checked);
+    
+    e.preventDefault();
+    e.stopPropagation();
 
-    let auxL = eFans[e.target.name];
+    ventsService.control(e.target.name, e.target.checked ? 'E' : 'A')
+    .then( res => {
 
-    auxL.Encendido = e.target.checked;
+      if(!res.error){
 
-    setEFans({...eFans, [e.target.name] : auxL});
+        let filtered = eFans.filter( item => item.dkey !== res.newState.dkey );
+        
+        setEFans([...filtered, res.newState]);//new state es el nuevo estado del foco devuelto por la api
+        
+      }
+
+    })
 
   }
   
   const ModalProgramar= () =>{
-    var clase = {}
+
     return(
       
-    <div id="modal1" className="modal" style={{maxHeight : '90%', height : '70%'}}>
+    <div id="modal1" className="modal" style={{maxuHeight : '90%', height : '70%',  width : '70%'}}>
     <div className="modal-content">
     <div className="row">
 
-        <blockquote>Elija la fecha y hora en que desea programar el evento</blockquote>
+        <blockquote>Elija la accion que desea programar</blockquote>
 
-        <div className="input-field col s12">
+        <p className="col s12 m6"><label>
+            <input className="with-gap" name="orden" type="radio"  />
+            <span>Encendido</span>
+        </label></p>
+        <p className="col s12 m6"><label>
+            <input className="with-gap" name="orden" type="radio"  />
+            <span>Apagado</span>
+        </label></p>
+
+    </div>
+
+    <div className="row">
+
+        <blockquote>Elija la fecha y hora a la que se debe ejecutar esa accion</blockquote>
+
+        <div className="input-field col s12 m6">
           <input id="hora" type="text" className="timepicker"/>
           <label htmlFor="hora">Programar Hora De Encendido/Apagado</label>
         </div>
-        <div className="input-field col s12">
+        <div className="input-field col s12 m6">
           <input id="fecha" type="text" className="datepicker"/>
           <label htmlFor="fecha">Programar Fecha De Encendido/Apagado</label>
         </div>
+
     </div>
     </div>
   </div>
@@ -139,7 +196,7 @@ const Luces = props => {
                   </label>
                 </div>
                 <br/>
-                <a className="waves-effect blue darken-4 btn modal-trigger" href="#modal1">
+                <a className="waves-effect indigo darken-1 btn modal-trigger" href="#modal1">
                 {props.name}
                 <i className="material-icons left">watch_later</i>
                 </a>
@@ -152,11 +209,13 @@ const Luces = props => {
 
   const Fan = (props) => {
 
+    let item = eFans.find( item => item.dkey === props.id);
+
     return(
       <div className={props.tam}>
               <div className="card">
                 <div className="card-image">
-                  <img className="responsive-img" src={eFans[props.id].Encendido ? fanOn : fanOff}/>
+                  <img className="responsive-img" src={item.encendida ? fanOn : fanOff}/>
                 </div>
                 <div className="card-content center-align">
 
@@ -164,14 +223,14 @@ const Luces = props => {
                   <label>
                     OFF
                     <input name={props.id} type="checkbox" onChange={changeFan}
-                    checked={eFans[props.id].Encendido}/>
+                    checked={item.encendida}/>
                     <span className="lever"></span>
                     ON
                   </label>
                 </div>
 
                 <br/>
-                <a className="waves-effect blue darken-4 btn modal-trigger" href="#modal1">
+                <a className="waves-effect indigo darken-1 btn modal-trigger" href="#modal1">
                 {props.name}
                 <i className="material-icons left">watch_later</i>
                 </a>
