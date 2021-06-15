@@ -27,47 +27,15 @@ const arrFans = {
   
 };
 
-const arrLuces = {
-
-  "LG" : {
-    NombreLuz : "Cochera",
-    Encendido : false
-  },
-  "LP" : {
-    NombreLuz : "Patio",
-    Encendido : false
-  },
-  "LA" : {
-    NombreLuz : "Cuarto 1",
-    Encendido : false
-  },
-  "LB" : {
-    NombreLuz : "Cuarto 2",
-    Encendido : false
-  },
-  "LS" : {
-    NombreLuz : "Sala",
-    Encendido : false
-  },
-  "LC" : {
-    NombreLuz : "Comedor",
-    Encendido : false
-  },
-  "LE" : {
-    NombreLuz : "Entrada",
-    Encendido : false
-  }
-  
-};
 
 const Luces = props => {
 
   //const {isLoaded, setIsLoaded} = useContext(AuthContext);
 
-  const [hover, setHover] = useState(false);
-  const [eLuces, setELuces] = useState(arrLuces);
+  const [eLuces, setELuces] = useState([]);
   const [eFans, setEFans] = useState(arrFans);
   const [l, setL] = useState(false);
+
 
   useEffect(() => {
 
@@ -75,8 +43,8 @@ const Luces = props => {
 
         if(!res.error){
 
-          console.log(res.data);
-          //setELuces(res.data);
+          //console.log(res.data);
+          setELuces(res.data);
           setL(true);
           
           var el = document.querySelector('.modal');
@@ -90,28 +58,27 @@ const Luces = props => {
 
       });
 
-      
-
-
-
     },[]);
 
-  const mouseEntro = () => {
-    setHover(true); //lo ponemos al contrario de como estava
-  }
-
-  const mouseSalio = () => {
-    setHover(false); //lo ponemos al contrario de como estava
-  }
-
   const changeLight = (e) => {
-    //console.log(e.target.name , e.target.checked);
 
-    let auxL = eLuces[e.target.name];
+    e.preventDefault();
+    e.stopPropagation();
 
-    auxL.Encendido = e.target.checked;
+    lucesService.control(e.target.name, e.target.checked ? 'E' : 'A')
+    .then( res => {
 
-    setELuces({...eLuces, [e.target.name] : auxL});
+      if(!res.error){
+
+        let filtered = eLuces.filter( item => item.dkey !== res.newState.dkey );
+        
+        setELuces([...filtered, res.newState]);
+        
+      }
+
+    })
+
+    
 
   }
 
@@ -132,17 +99,17 @@ const Luces = props => {
       
     <div id="modal1" className="modal" style={{maxHeight : '90%', height : '70%'}}>
     <div className="modal-content">
-    <div class="row">
+    <div className="row">
 
         <blockquote>Elija la fecha y hora en que desea programar el evento</blockquote>
 
-        <div class="input-field col s12">
+        <div className="input-field col s12">
           <input id="hora" type="text" className="timepicker"/>
-          <label for="hora">Programar Hora De Encendido/Apagado</label>
+          <label htmlFor="hora">Programar Hora De Encendido/Apagado</label>
         </div>
-        <div class="input-field col s12">
+        <div className="input-field col s12">
           <input id="fecha" type="text" className="datepicker"/>
-          <label for="fecha">Programar Fecha De Encendido/Apagado</label>
+          <label htmlFor="fecha">Programar Fecha De Encendido/Apagado</label>
         </div>
     </div>
     </div>
@@ -152,27 +119,29 @@ const Luces = props => {
 
   const Luz = (props) => {
 
+    let item = eLuces.find( item => item.dkey === props.id);
+
     return(
       <div className={props.tam}>
               <div className="card">
                 <div className="card-image">
-                  <img className="responsive-img" src={eLuces[props.id].Encendido ? focoOn : focoOff}/>
+                  <img className="responsive-img" src={item.encendida ? focoOn : focoOff}/>
                 </div>
                 <div className="card-content center-align">
 
-                <div class="switch">
+                <div className="switch">
                   <label>
                     OFF
                     <input name={props.id} type="checkbox" onChange={changeLight}
-                    checked={eLuces[props.id].Encendido}/>
-                    <span class="lever"></span>
+                    checked={item.encendida}/>
+                    <span className="lever"></span>
                     ON
                   </label>
                 </div>
                 <br/>
-                <a class="waves-effect blue darken-4 btn modal-trigger" href="#modal1">
+                <a className="waves-effect blue darken-4 btn modal-trigger" href="#modal1">
                 {props.name}
-                <i class="material-icons left">watch_later</i>
+                <i className="material-icons left">watch_later</i>
                 </a>
 
                 </div>
@@ -191,20 +160,20 @@ const Luces = props => {
                 </div>
                 <div className="card-content center-align">
 
-                <div class="switch">
+                <div className="switch">
                   <label>
                     OFF
                     <input name={props.id} type="checkbox" onChange={changeFan}
                     checked={eFans[props.id].Encendido}/>
-                    <span class="lever"></span>
+                    <span className="lever"></span>
                     ON
                   </label>
                 </div>
 
                 <br/>
-                <a class="waves-effect blue darken-4 btn modal-trigger" href="#modal1">
+                <a className="waves-effect blue darken-4 btn modal-trigger" href="#modal1">
                 {props.name}
-                <i class="material-icons left">watch_later</i>
+                <i className="material-icons left">watch_later</i>
                 </a>
                 </div>
               </div>

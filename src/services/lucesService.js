@@ -20,7 +20,8 @@ export default {
         return fetch(`${BU}/luces/${luz}/${orden}`,{
             method : "POST",
             headers : {
-                'Content-Type' : 'application/json'
+                'Content-Type' : 'application/json',
+                'Authorization': T 
             }
         }).then(res => res.json())
         .then(data => data)
