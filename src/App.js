@@ -16,6 +16,7 @@ import Home from './components/home';// aca se encuentran los 4 inicios
 import Luces from './components/luces';
 import Sprinkler from './components/aspersores';
 import Security from './components/seguridad';
+import AppLog from './components/applog';
 import Login from './components/login';
 
 //import InfoUser from './components/global/infoUser';
@@ -40,6 +41,7 @@ function App() {
       <PrivateRoute exact path="/LucyVen" roles={["user"]} component={Luces}/>
       <PrivateRoute exact path="/Sprinkler" roles={["user"]} component={Sprinkler}/>
       <PrivateRoute exact path="/Security" roles={["user"]} component={Security}/>
+      <PrivateRoute exact path="/LOG" roles={["user"]} component={AppLog}/>
       <PublicRoute path="/Login" roles={["user"]} component={Login}/>
 
       <Redirect to="/"/> {/* para redireccionar cualquier otra ruta a la pagina de inicio*/}
