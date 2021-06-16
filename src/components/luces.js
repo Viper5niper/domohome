@@ -169,6 +169,12 @@ const Luces = props => {
         </div>
 
     </div>
+    
+    <button className="waves-effect btn indigo darken-1">
+    Programar accion
+    <i className="material-icons right">schedule_send</i>
+    </button>
+
     </div>
   </div>
     )

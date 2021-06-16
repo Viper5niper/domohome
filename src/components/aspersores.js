@@ -1,99 +1,139 @@
 import React, {useState, useEffect} from 'react';
 
+import aspService from '../services/aspService';
 
 import sprinklerOn from './img/aspersor.gif';
 import sprinklerOff from './img/aspersor-off.gif';
 
+import Loader from './subComps/loader';
+
 import M from "materialize-css";
 
 
-const arrSprinkler = {
 
-  "S1" : {
-    NombreAspersor : "Aspersor 1",
-    Encendido : false
-  },
-  "S2" : {
-    NombreAspersor : "Aspersor 2",
-    Encendido : false
-  },
-  "S3" : {
-    NombreAspersor : "Aspersor 3",
-    Encendido : false
-  },
-  "S4" : {
-    NombreAspersor : "Aspersor 4",
-    Encendido : false
-  }
+const spanishDates = {
+  months: ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'],
+  monthsShort: ['Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun', 'Jul', 'Ago', 'Sep', 'Oct', 'Nov', 'Dic'],
+  weekdaysFull: ['Domingo', 'Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado'],
+  weekdaysShort: ['Dom', 'Lun', 'Mar', 'Mié', 'Jue', 'Vie', 'Sáb'],
+    selectMonths: true,
+    selectYears: 100, // Puedes cambiarlo para mostrar más o menos años
+    today: 'Hoy',
+    clear: 'Limpiar',
+    done: 'Ok',
+    labelMonthNext: 'Siguiente mes',
+  labelMonthPrev: 'Mes anterior',
+  labelMonthSelect: 'Selecciona un mes',
+  labelYearSelect: 'Selecciona un año',
+  weekdaysAbbrev: ['D','L','M','X','J','V','S'],
+  };
   
-};
-
 const Aspersor = props => {
 
-  const [hover, setHover] = useState(false);
-  const [eWater, setEWater] = useState(arrSprinkler);
+  const [l, setL] = useState(false);
+  const [eWater, setEWater] = useState([]);
 
   useEffect(() => {
-      //setELuces(arrLuces);
-      console.log("la ventaja de crear el componente a parte es que podes hacer funciones especificas para ese componente. Por ejemplo, aca cuando se cargue (useEffect) puedo hacer que tire este console log y no hace bulto en el componente principal (home). Lo mismo podes hacer cuando se le da click al componente. Fijate que cuando pasas el mouse encima solo cambia de color el muy subcomponente y no todo el componente principal que conforma a home, aca podes ver el codigo de como se hizo eso");
-      var el = document.querySelector('.modal');
-      M.Modal.init(el, {});
-      el = document.querySelector('.datepicker');
-      M.Datepicker.init(el,{});
-      el = document.querySelector('.timepicker');
-      M.Timepicker.init(el,{});
+
+    aspService.get().then( res =>{ //busqueda de luces
+
+      if(!res.error){
+
+        //console.log(res.data);
+        setEWater(res.data);
+        setL(true);
+        
+        var el = document.querySelector('.modal');
+        M.Modal.init(el, {});
+        el = document.querySelector('.datepicker');
+        M.Datepicker.init(el,{ defaultDate : Date.now(), setDefaultDate : true, i18n : spanishDates});
+        el = document.querySelector('.timepicker');
+        M.Timepicker.init(el,{});
+
+      }
+
+    });
+
     },[]);
-
-  const mouseEntro = () => {
-    setHover(true); //lo ponemos al contrario de como estava
-  }
-
-  const mouseSalio = () => {
-    setHover(false); //lo ponemos al contrario de como estava
-  }
 
   const changeWater = (e) => {
     //console.log(e.target.name , e.target.checked);
 
-    let auxL = eWater[e.target.name];
+    e.preventDefault();
+    e.stopPropagation();
 
-    auxL.Encendido = e.target.checked;
+    aspService.control(e.target.name, e.target.checked ? 'E' : 'A')
+    .then( res => {
 
-    setEWater({...eWater, [e.target.name] : auxL});
+      if(!res.error){
+
+        let filtered = eWater.filter( item => item.dkey !== res.newState.dkey );
+        
+        //res.newState.encendida ? LampOn.play() : LampOff.play();//reproducimos el sonido correspondiente
+
+        setEWater([...filtered, res.newState]);//new state es el nuevo estado del foco devuelto por la api
+        
+      }
+
+    })
 
   }
 
   const ModalProgramar= () =>{
-    var clase = {}
+
     return(
       
-    <div id="modal1" className="modal" style={{maxHeight : '90%', height : '70%'}}>
+    <div id="modal1" className="modal" style={{maxuHeight : '90%', height : '70%',  width : '70%'}}>
     <div className="modal-content">
-    <div class="row">
+    <div className="row">
 
-        <blockquote>Elija la fecha y hora en que desea programar el evento</blockquote>
+        <blockquote>Elija la accion que desea programar</blockquote>
 
-        <div class="input-field col s12">
-          <input id="hora" type="text" className="timepicker"/>
-          <label for="hora">Programar Hora De Encendido/Apagado</label>
-        </div>
-        <div class="input-field col s12">
-          <input id="fecha" type="text" className="datepicker"/>
-          <label for="fecha">Programar Fecha De Encendido/Apagado</label>
-        </div>
+        <p className="col s12 m6"><label>
+            <input className="with-gap" name="orden" type="radio"  />
+            <span>Encendido</span>
+        </label></p>
+        <p className="col s12 m6"><label>
+            <input className="with-gap" name="orden" type="radio"  />
+            <span>Apagado</span>
+        </label></p>
+
     </div>
+
+    <div className="row">
+
+        <blockquote>Elija la fecha y hora a la que se debe ejecutar esa accion</blockquote>
+
+        <div className="input-field col s12 m6">
+          <input id="hora" type="text" className="timepicker"/>
+          <label htmlFor="hora">Programar Hora De Encendido/Apagado</label>
+        </div>
+        <div className="input-field col s12 m6">
+          <input id="fecha" type="text" className="datepicker"/>
+          <label htmlFor="fecha">Programar Fecha De Encendido/Apagado</label>
+        </div>
+
+    </div>
+    
+    <button className="waves-effect btn indigo darken-1">
+    Programar accion
+    <i className="material-icons right">schedule_send</i>
+    </button>
+
     </div>
   </div>
     )
   }
   
   const Agua = (props) => {
+    
+    let item = eWater.find( item => item.dkey === props.id);
 
     return(
       <div className={props.tam}>
         <div className="card">
           <div className="card-image">
-            <img className="responsive-img" src={eWater[props.id].Encendido ? sprinklerOn : sprinklerOff}/>
+            <img className="responsive-img" src={item.encendida ? sprinklerOn : sprinklerOff}/>
           </div>
         </div>
       </div>
@@ -101,13 +141,16 @@ const Aspersor = props => {
   }
   
   const controlAG = (props) => {
-    return(<>
+  
+  let item = eWater.find( item => item.dkey === props.id);
+
+  return(<>
   <div className="row">
     <div className="switch">
       <label>
         OFF
-        <input type="checkbox"
-        />
+        <input name={props.id} type="checkbox" onChange={changeWater}
+        checked={item.encendida}/>
         <span class="lever"></span>
         ON
       </label>
@@ -115,7 +158,7 @@ const Aspersor = props => {
   </div>
 
   <div className="row">  
-  <a class="waves-effect blue darken-4 btn modal-trigger" href="#modal1">
+  <a class="waves-effect btn indigo darken-1 modal-trigger" href="#modal1">
        Programar
       <i class="material-icons left">watch_later</i>
     </a>
@@ -125,24 +168,25 @@ const Aspersor = props => {
   }
 
     return(<>
-  <div className="row">
-    <div className="col s12">
-          {Agua({name : "Aspersor 1", id: "S1", tam: "col s6 m3"})}
-          {Agua({name : "Aspersor 2", id: "S2", tam: "col s6 m3"})}
-          {Agua({name : "Aspersor 3", id: "S3", tam: "col s6 m3"})}
-          {Agua({name : "Aspersor 4", id: "S4", tam: "col s6 m3"})}
-      </div>
- 
+      {!l ? <Loader/> :
+      <div className="row">
+        <div className="col s12">
+              {Agua({name : "Aspersor 1", id: "AP", tam: "col s6 m3"})}
+              {Agua({name : "Aspersor 2", id: "AP", tam: "col s6 m3"})}
+              {Agua({name : "Aspersor 3", id: "AP", tam: "col s6 m3"})}
+              {Agua({name : "Aspersor 4", id: "AP", tam: "col s6 m3"})}
+          </div>
 
-    <div className="col s12">
-      <div className="card grey lighten-2 col s12 m6 offset-m3">
-        <div className="card-content center-align">
-          {controlAG()}
-          {ModalProgramar()}
+        <div className="col s12">
+          <div className="card grey lighten-2 col s12 m6 offset-m3">
+            <div className="card-content center-align">
+              {controlAG({id : 'AP'})}
+            </div>
+          </div>
         </div>
+        {ModalProgramar()}
       </div>
-    </div>
-  </div>
+      }
      </>
     )
 }

@@ -117,6 +117,17 @@ const Unlock = props => {
                 </div>
                 <div className="card-content center-align">
                   <ReactCodeInput fields={4} fieldWidth="58px"/>
+
+                  <div class="switch">
+                  <label>
+                    OFF
+                    <input name={props.id} type="checkbox" onChange={changeEntrada}
+                    checked={eEntrada[props.id].Encendido}/>
+                    <span class="lever"></span>
+                    ON
+                  </label>
+                </div>
+
                 </div>
               </div>
             </div>

@@ -68,7 +68,7 @@ const Login = (props) => {
                 <div style={{display: '-webkit-inline-box'}}>
                 </div>
                 <br /><br />
-                <center><Link to="/recuperar">Olvide Mi Contraseña</Link></center>
+                {/*<center><Link to="/recuperar">Olvide Mi Contraseña</Link></center>*/}
                 <br />
                 <center><Link to="/">Inicio</Link></center>
             </>
