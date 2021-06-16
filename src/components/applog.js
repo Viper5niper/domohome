@@ -2,6 +2,9 @@ import React, {useContext, useEffect} from 'react';
 import {Link} from 'react-router-dom';
 import {AuthContext} from '../context/authContext';
 import { LazyLog } from 'react-lazylog';
+
+import log from './app.log';//
+
 const AppLog = () => {
 
     const {user,isAuth} = useContext(AuthContext);
@@ -18,7 +21,7 @@ const AppLog = () => {
       return(<>
       <div >
         
-            <LazyLog url="./app.log"/>
+            <LazyLog url={log}/>
 
       </div>
       </>)
