@@ -16,10 +16,6 @@ const Home = () => {
       // }
     },[]);
 
-    const componenteDeFuncion = () => {
-      return(<span className="red-text">Soy un componente en una funcion del componente principal</span>)
-    }
-
     const unAuthHome = () => {
         return(
             <div>
@@ -59,7 +55,7 @@ const Home = () => {
         <div className="col s7">
           <div className="card white">
             <div className="card-content black-text">
-              <div className="card-title"><h5>GASTOS DE ENERGIA EN LUCES Y VENTILACION</h5></div>
+              <div className="card-title"><h5>PROMEDIOS DE TEMPERATURA</h5></div>
             <center><Chart
               height='466px'
               width='700px'

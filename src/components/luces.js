@@ -95,8 +95,6 @@ const Luces = props => {
     e.preventDefault();
     e.stopPropagation();
 
-    e.target.checked ? LampOn.play() : LampOff.play();
-
     lucesService.control(e.target.name, e.target.checked ? 'E' : 'A')
     .then( res => {
 
@@ -104,6 +102,8 @@ const Luces = props => {
 
         let filtered = eLuces.filter( item => item.dkey !== res.newState.dkey );
         
+        res.newState.encendida ? LampOn.play() : LampOff.play();//reproducimos el sonido correspondiente
+
         setELuces([...filtered, res.newState]);//new state es el nuevo estado del foco devuelto por la api
         
       }
@@ -169,6 +169,12 @@ const Luces = props => {
         </div>
 
     </div>
+    
+    <button className="waves-effect btn indigo darken-1">
+    Programar accion
+    <i className="material-icons right">schedule_send</i>
+    </button>
+
     </div>
   </div>
     )
