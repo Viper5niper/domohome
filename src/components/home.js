@@ -1,7 +1,7 @@
 import React, {useContext, useEffect} from 'react';
 import {Link} from 'react-router-dom';
 import Chart from 'bk-react-charts';
-
+import domot from '../img/domotica.png'
 import {AuthContext} from '../context/authContext';
 
 
@@ -18,11 +18,40 @@ const Home = () => {
 
     const unAuthHome = () => {
         return(
-            <div>
-            <Link to='/Login'>Loguearse</Link>
-            <p>Has cerrado la sesion, aca quiero que vaya una pagina de bienvenida al usuario. Es decision tuya si queres hacer a parte el login o aca mismo. Recorda que por ahora solo importa el maquetado y no el funcionamiento, deja todo ordenado dentro de divs, y dividi las secciones en cards. Si queres volver a ver el inicio recarga la pagina, y para volver aca clickea el boton de cerrar sesion</p>
-
+      <div className="pixelBG grey lighten-2">
+          <br/><br/>
+            <div className="row">
+              <div className="col s12 m8 offset-m2">
+                <div className="card white">
+                  <div className="card-content black-text">
+                    <h4 className="center-align"><b>Bienvenid@ A Domotica Con Proteus</b></h4>
+                </div>
+              </div>
             </div>
+
+              <div class="col s12 m8 offset-m2">
+              <div class="card horizontal">
+                <div class="card-image">
+                  <img src={domot}/>
+                </div>
+                <div class="card-stacked">
+                  <div class="card-content">
+                    <h5><b>AQUI UN PEQUEÑO CONCEPTO SOBRE DOMOTICA</b></h5>
+                    <br/>
+                    <p style={{textAlign:'justify'}}>Se llama domótica a los sistemas capaces de automatizar una vivienda o edificación de cualquier tipo, 
+                      aportando servicios de gestión energética, seguridad, bienestar y comunicación, y que pueden estar 
+                      integrados por medio de redes interiores y exteriores de comunicación, cableadas o inalámbricas, 
+                      y cuyo control goza de cierta ubicuidad, desde dentro y fuera del hogar. Se podría definir como la 
+                      integración de la tecnología en el diseño inteligente de un recinto cerrado.</p>
+                  </div>
+                  <div class="card-action">
+                    <center><Link to='/Login' className="btn indigo darken-1">INGRESAR</Link></center>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
         )
     }
 
