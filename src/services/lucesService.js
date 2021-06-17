@@ -31,7 +31,8 @@ export default {
         return fetch(`${BU}/lucestodas/${orden}`,{
             method : "POST",
             headers : {
-                'Content-Type' : 'application/json'
+                'Content-Type' : 'application/json',
+                'Authorization': T 
             }
         }).then(res => res.json())
         .then(data => data)
@@ -42,7 +43,8 @@ export default {
             method : "POST",
             body : JSON.stringify({ hora : time}),
             headers : {
-                'Content-Type' : 'application/json'
+                'Content-Type' : 'application/json',
+                'Authorization': T 
             }
         }).then(res => res.json())
         .then(data => data)

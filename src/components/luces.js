@@ -82,6 +82,9 @@ const Luces = props => {
           el = document.querySelector('.timepicker');
           M.Timepicker.init(el,{});
 
+          var el = document.querySelectorAll('.fixed-action-btn');
+          M.FloatingActionButton.init(el, {});
+
         }
 
       });
@@ -114,6 +117,22 @@ const Luces = props => {
 
   }
 
+  const changeAllLights = (e,opcion) => {
+
+    lucesService.todas(opcion).then( res => {
+
+      if(!res.error){
+
+        opcion == 'E' ? LampOn.play() : LampOff.play();//reproducimos el sonido correspondiente
+
+        setELuces(res.newState);
+
+      }
+
+    })
+
+  }
+
   const changeFan = (e) => {
     
     e.preventDefault();
@@ -128,6 +147,22 @@ const Luces = props => {
         
         setEFans([...filtered, res.newState]);//new state es el nuevo estado del foco devuelto por la api
         
+      }
+
+    })
+
+  }
+
+  const changeAllFans = (e,opcion) => {
+
+    ventsService.todas(opcion).then( res => {
+
+      if(!res.error){
+
+        opcion == 'E' ? LampOn.play() : LampOff.play();//reproducimos el sonido correspondiente
+
+        setEFans(res.newState);
+
       }
 
     })
@@ -246,6 +281,22 @@ const Luces = props => {
     )
   }
 
+  const BtnExtra = () => {
+    return(
+      <div className="fixed-action-btn">
+        <a className="btn-floating btn-large indigo darken-1">
+          <i className="large material-icons">dialpad</i>
+        </a>
+        <ul>
+          <li><button onClick={(e) => changeAllLights(e,'E')} className="btn-floating indigo darken-1"><i className="material-icons">brightness_high</i></button></li>
+          <li><button onClick={(e) => changeAllLights(e,'A')}  className="btn-floating indigo darken-1 waves-light"><i className="material-icons">brightness_low</i></button></li>
+          <li><button onClick={(e) => changeAllFans(e,'E')} className="btn-floating indigo darken-1"><i className="material-icons">air</i></button></li>
+          <li><button onClick={(e) => changeAllFans(e,'A')} className="btn-floating indigo darken-1"><i className="material-icons">block</i></button></li>
+        </ul>
+      </div>
+    )
+  }
+
     return(<>
       {!l ? <Loader/> :
       <div className="row">
@@ -267,7 +318,10 @@ const Luces = props => {
           {Fan({name : "Cuarto 2", id: "VB", tam: "col s6 m4"})}
       </div>
       {ModalProgramar()}
+      {BtnExtra()}
     </div>
+
+
     }
      </>
     )
