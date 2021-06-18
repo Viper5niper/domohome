@@ -4,6 +4,25 @@ import Chart from 'bk-react-charts';
 import domot from '../img/domotica.png'
 import {AuthContext} from '../context/authContext';
 
+// import { Steps } from 'intro.js-react';
+
+// const steps = [
+//   {
+//     element: '#paso1',
+//     intro: 'test 1',
+//     position: 'right',
+//     tooltipClass: 'myTooltipClass',
+//     highlightClass: 'myHighlightClass',
+//   },
+//   {
+//     element: '#paso2',
+//     intro: 'test 2',
+//   },
+//   {
+//     element: '#paso3',
+//     intro: 'test 3',
+//   },
+// ];
 
 const Home = () => {
 
@@ -74,7 +93,7 @@ const Home = () => {
       return(<>
       <div className="row">
       <div className="col s12">
-          <div className="card white">
+          <div className="card white" id="paso1">
             <div className="card-content black-text">
               <div className="card-title"><center><h5>BIENVENID@ A DOMOTICA CON PROTEUS</h5></center></div>
             </div>
@@ -82,7 +101,7 @@ const Home = () => {
         </div>
 
         <div className="col s7">
-          <div className="card white">
+          <div className="card white" id="paso2">
             <div className="card-content black-text">
               <div className="card-title"><h5>PROMEDIOS DE TEMPERATURA</h5></div>
             <center><Chart
@@ -102,7 +121,7 @@ const Home = () => {
 
         <div className="col s5">
           <div className="card white">
-            <div className="card-content black-text">
+            <div className="card-content black-text" id="paso3">
               <div className="card-title"><h5>N° DE VECES QUE SE ABRIERON LAS PUERTAS</h5></div>
                 <table className="responsive-table">
                   <thead>
@@ -142,6 +161,12 @@ const Home = () => {
             </div>
           </div>
         </div>
+
+        {/* <Steps
+          enabled={true}
+          steps={steps}
+        /> */}
+
       </div>
       </>)
     }

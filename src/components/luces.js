@@ -1,4 +1,4 @@
-import React, {useState, useEffect, useContext} from 'react';
+import React, {useState, useEffect, useContext, useRef} from 'react';
 
 import lucesService from '../services/lucesService';
 import {AuthContext} from '../context/authContext';
@@ -55,9 +55,27 @@ const Luces = props => {
   const [eLuces, setELuces] = useState([]);
   const [eFans, setEFans] = useState([]);
   const [l, setL] = useState(false);
+  const [isProg, setIsProg] = useState(false);
+
+  const [pluz, setPluz] = useState({luz : "", orden : ""})
+
+  const first = useRef(true);
 
 
   useEffect(() => {
+
+
+    if(!first.current){
+
+          let el = document.querySelector('.datepicker');
+          M.Datepicker.init(el,{ defaultDate : Date.now(), setDefaultDate : true, i18n : spanishDates});
+          el = document.querySelector('.timepicker');
+          M.Timepicker.init(el,{ twelveHour : false});
+
+          return;
+
+    }
+
     LampOn = new Audio("./mp3/LampOn.mp3");
     LampOff = new Audio("./mp3/LampOff.mp3");
 
@@ -80,10 +98,12 @@ const Luces = props => {
           el = document.querySelector('.datepicker');
           M.Datepicker.init(el,{ defaultDate : Date.now(), setDefaultDate : true, i18n : spanishDates});
           el = document.querySelector('.timepicker');
-          M.Timepicker.init(el,{});
+          M.Timepicker.init(el,{ twelveHour : false});
 
           var el = document.querySelectorAll('.fixed-action-btn');
           M.FloatingActionButton.init(el, {});
+
+          first.current = false;
 
         }
 
@@ -91,7 +111,42 @@ const Luces = props => {
 
     }});//fin busqueda de vents
 
-    },[]);
+    },[isProg]);
+  
+  const handleProgramar = (e) => {
+    e.preventDefault();
+
+    var fecha, tiempo;
+
+    let ele = document.querySelector('.datepicker');
+    fecha = M.Datepicker.getInstance(ele).date;
+
+    ele = document.querySelector('.timepicker');
+    tiempo = M.Timepicker.getInstance(ele).time;
+
+    var a = tiempo.split(':'); // split it at the colons
+    var seconds = (+a[0]) * 60 * 60 + (+a[1]) * 60; // minutes are worth 60 seconds. Hours are worth 60 minutes.
+    fecha.setSeconds( fecha.getHours() + seconds );
+    let timestamp = Math.floor(fecha.getTime() / 1000);
+
+    setIsProg(true);
+    lucesService.programar(pluz.luz, pluz.orden, timestamp).then(res => {
+
+      if(!res.error){
+        setIsProg(false);
+        
+        M.toast({html: res.message})
+
+        let ele = document.querySelector('.modal');
+        let mdl = M.Modal.getInstance(ele);
+        mdl.close();
+      }
+
+    });
+
+    console.log(pluz);
+    //console.log(date.date);
+  }
 
   const changeLight = (e) => {
 
@@ -175,16 +230,18 @@ const Luces = props => {
       
     <div id="modal1" className="modal" style={{maxuHeight : '90%', height : '70%',  width : '70%'}}>
     <div className="modal-content">
+    {isProg ? <Loader/> : 
+    <form onSubmit={handleProgramar}>
     <div className="row">
 
         <blockquote>Elija la accion que desea programar</blockquote>
 
         <p className="col s12 m6"><label>
-            <input className="with-gap" name="orden" type="radio"  />
+            <input className="with-gap" name="orden" type="radio" onChange={(e) => setPluz({...pluz, orden : "E"})} required/>
             <span>Encendido</span>
         </label></p>
         <p className="col s12 m6"><label>
-            <input className="with-gap" name="orden" type="radio"  />
+            <input className="with-gap" name="orden" type="radio"  onChange={(e) => setPluz({...pluz, orden : "A"})} required/>
             <span>Apagado</span>
         </label></p>
 
@@ -195,21 +252,22 @@ const Luces = props => {
         <blockquote>Elija la fecha y hora a la que se debe ejecutar esa accion</blockquote>
 
         <div className="input-field col s12 m6">
-          <input id="hora" type="text" className="timepicker"/>
+          <input id="hora" type="text" className="timepicker" required/>
           <label htmlFor="hora">Programar Hora De Encendido/Apagado</label>
         </div>
         <div className="input-field col s12 m6">
-          <input id="fecha" type="text" className="datepicker"/>
+          <input id="fecha" type="text" className="datepicker" required/>
           <label htmlFor="fecha">Programar Fecha De Encendido/Apagado</label>
         </div>
 
     </div>
     
-    <button className="waves-effect btn indigo darken-1">
+    <button className="waves-effect btn indigo darken-1" type="submit">
     Programar accion
     <i className="material-icons right">schedule_send</i>
     </button>
-
+    </form>}
+    
     </div>
   </div>
     )
@@ -237,7 +295,8 @@ const Luces = props => {
                   </label>
                 </div>
                 <br/>
-                <a className="waves-effect indigo darken-1 btn modal-trigger" href="#modal1">
+                <a className="waves-effect indigo darken-1 btn modal-trigger" href="#modal1" 
+                onClick={(e) => setPluz({...pluz, luz : props.id})}>
                 {props.name}
                 <i className="material-icons left">watch_later</i>
                 </a>
