@@ -1,103 +1,157 @@
-import React, {useState, useEffect} from 'react';
+import React, {useState, useEffect, useRef} from 'react';
 
+import cerrojosService from '../services/cerrojosService';
 
-import garageOn from './img/cochera.jpg';
-import garageOff from './img/cochera-open.jpg';
+import garageOn from './img/garage-open.svg';
+import garageOff from './img/garage-close.svg';
 import entradaOn from './img/door.jpg';
 import entradaOff from './img/door-close.jpg';
-import patioOn from './img/patio-open.jpg';
-import patioOff from './img/patio-close.jpg';
+import patioOn from './img/patio-open.svg';
+import patioOff from './img/patio-close.svg';
 import ReactCodeInput from 'react-verification-code-input';
+import Loader from './subComps/loader';
 
 import M from "materialize-css";
 
-const arrCochera = {
-  "SG" : {
-    NombreLuz : "Cochera",
-    Encendido : false
-  }
-};
-
-const arrPatio = {
-  "SP" : {
-    NombreLuz : "Patio",
-    Encendido : false
-  }
-}
-
-const arrEntrada = {
-  "SE" : {
-    NombreLuz : "Entrada",
-    Encendido : false
-  }
-}
-
 const Unlock = props => {
 
-  const [hover, setHover] = useState(false);
-  const [eCochera, setCochera] = useState(arrCochera);
-  const [eEntrada, setEntrada] = useState(arrEntrada);
-  const [ePatio, setPatio] = useState(arrPatio);
+  const [cerrojos, setCerrojos] = useState([]);
+  const [l, setL] = useState(false);
+  const [entrance, setEntrance] = useState({cerr: "", orden : "", code : ""})
+  const [isOpening, setIsOpening] = useState(false);
 
-  useEffect(() => {
-      //setCochera(arrCochera);
-      console.log("la ventaja de crear el componente a parte es que podes hacer funciones especificas para ese componente. Por ejemplo, aca cuando se cargue (useEffect) puedo hacer que tire este console log y no hace bulto en el componente principal (home). Lo mismo podes hacer cuando se le da click al componente. Fijate que cuando pasas el mouse encima solo cambia de color el muy subcomponente y no todo el componente principal que conforma a home, aca podes ver el codigo de como se hizo eso");
+  const first = useRef(true);
+
+  useEffect(() => {   
+      cerrojosService.get().then( res => {
+
+        if(!res.error){
+          
+          setCerrojos(res.data);
+          setL(true);
+
+          var el = document.querySelector('.modal');
+          M.Modal.init(el, {});
+
+        }
+
+      });
   },[]);
 
-  const mouseEntro = () => {
-    setHover(true); //lo ponemos al contrario de como estava
-  }
 
-  const mouseSalio = () => {
-    setHover(false); //lo ponemos al contrario de como estava
-  }
+  useEffect(() => {   
+    if(!first.current){
 
-  const changeCochera = (e) => {
+      return;
+    }
+},[isOpening]);
+
+
+  const changeCerr = (e) => {
     //console.log(e.target.name , e.target.checked);
 
-    let auxL = eCochera[e.target.name];
+    e.preventDefault();
+    e.stopPropagation();
 
-    auxL.Encendido = e.target.checked;
+    cerrojosService.control(e.target.name, e.target.checked ? 'E' : 'A')
+    .then( res => {
 
-    setCochera({...eCochera, [e.target.name] : auxL});
+      if(!res.error){
+
+        let filtered = cerrojos.filter( item => item.dkey !== res.newState.dkey );
+        
+        //res.newState.encendida ? LampOn.play() : LampOff.play();//reproducimos el sonido correspondiente
+
+        setCerrojos([...filtered, res.newState]);//new state es el nuevo estado del foco devuelto por la api
+        
+      }
+
+    })
 
   }
 
   const changeEntrada = (e) => {
 
-    let auxL = eEntrada[e.target.name];
+    let op = e.target.checked ? 'E' : 'A';
 
-    auxL.Encendido = e.target.checked;
+    setEntrance({...entrance, cerr : e.target.name, orden : op})
 
-    setEntrada({...eEntrada, [e.target.name] : auxL});
+    if(op === 'E'){
+      let ele = document.querySelector('#modal');
+      let mdl = M.Modal.getInstance(ele);
+      mdl.open();
+    }else{
+
+      cerrojosService.control(e.target.name, op)
+      .then( res => {
+  
+        if(!res.error){
+          let filtered = cerrojos.filter( item => item.dkey !== res.newState.dkey );
+          setCerrojos([...filtered, res.newState]);//new state es el nuevo estado del foco devuelto por la api      
+        }
+      }) 
+
+    }
 
   }
 
-  const changePatio = (e) => {
+  const abrirEntrada = (e) => {
 
-    let auxL = ePatio[e.target.name];
+    e.preventDefault();
 
-    auxL.Encendido = e.target.checked;
+    setIsOpening(true);
 
-    setPatio({...ePatio, [e.target.name] : auxL});
+    let {cerr, orden, code} = entrance;
 
+    cerrojosService.entrada(cerr, orden, code).then( res => {
+
+      
+
+      if(res.error){
+
+        setIsOpening(false);
+        res.log.map( item => M.toast({html : item}));
+      }
+      else{
+        M.toast({html : res.message});
+        
+        let filtered = cerrojos.filter( item => item.dkey !== res.newState.dkey );
+        
+        //res.newState.encendida ? LampOn.play() : LampOff.play();//reproducimos el sonido correspondiente
+
+        setCerrojos([...filtered, res.newState]);//new state es el nuevo estado del foco devuelto por la api
+        
+        setIsOpening(false);
+
+        let ele = document.querySelector('#modal');
+        let mdl = M.Modal.getInstance(ele);
+        mdl.close();
+
+      }
+
+
+    })
+
+    console.log(entrance);
   }
-
+  
   const Cochera = (props) => {
+
+    let item = cerrojos.find( item => item.dkey === props.id);
 
     return(
       <div className={props.tam}>
               <div className="card">
                 <div className="card-image">
-                  <img className="responsive-img" src={eCochera[props.id].Encendido ? garageOff : garageOn}/>
+                  <img className="responsive-img" src={item.encendida ? garageOn : garageOff}/>
                 </div>
                 <div className="card-content center-align">
                 <div class="switch">
                   <label>
                     OFF
-                    <input name={props.id} type="checkbox" onChange={changeCochera}
-                    checked={eCochera[props.id].Encendido}/>
-                    <span class="lever"></span>
+                    <input name={props.id} type="checkbox" onChange={changeCerr}
+                    checked={item.encendida}/>
+                    <span className="lever"></span>
                     ON
                   </label>
                 </div>
@@ -109,20 +163,21 @@ const Unlock = props => {
 
   const Entrada = (props) => {
 
+    let item = cerrojos.find( item => item.dkey === props.id);
+
     return(
       <div className={props.tam}>
               <div className="card">
                 <div className="card-image">
-                  <img className="responsive-img" src={eEntrada[props.id].Encendido ? entradaOn : entradaOff}/>
+                  <img className="responsive-img" src={item.encendida ? entradaOn : entradaOff}/>
                 </div>
                 <div className="card-content center-align">
-                  <ReactCodeInput fields={4} fieldWidth="58px"/>
 
                   <div class="switch">
                   <label>
                     OFF
                     <input name={props.id} type="checkbox" onChange={changeEntrada}
-                    checked={eEntrada[props.id].Encendido}/>
+                    checked={item.encendida}/>
                     <span class="lever"></span>
                     ON
                   </label>
@@ -136,18 +191,20 @@ const Unlock = props => {
 
   const Patio = (props) => {
 
+    let item = cerrojos.find( item => item.dkey === props.id);
+
     return(
       <div className={props.tam}>
               <div className="card">
                 <div className="card-image">
-                  <img className="responsive-img"  src={ePatio[props.id].Encendido ? patioOn : patioOff}/>
+                  <img className="responsive-img"  src={item.encendida ? patioOn : patioOff}/>
                 </div>
                 <div className="card-content center-align">
                 <div class="switch">
                   <label>
                     OFF
-                    <input name={props.id} type="checkbox" onChange={changePatio}
-                    checked={ePatio[props.id].Encendido}/>
+                    <input name={props.id} type="checkbox" onChange={changeCerr}
+                    checked={item.encendida}/>
                     <span class="lever"></span>
                     ON
                   </label>
@@ -158,14 +215,43 @@ const Unlock = props => {
     )
   }
 
+  const ModalPin = () =>{
+
+    return(
+      
+    <div id="modal" className="modal" style={{maxuHeight : '90%', height : '50%',  width : '50%'}}>
+    <div className="modal-content">
+    {isOpening ? <Loader/> : 
+    <form onSubmit={abrirEntrada}>
+    <div className="row cemter-align">
+
+        <blockquote>Ingrese su pin secreto</blockquote>
+
+        <ReactCodeInput fields={4} fieldWidth="58px" 
+        onChange={(vals)=> setEntrance({...entrance, code : vals})}/>
+    </div>
+    <button className="waves-effect btn indigo darken-1" type="submit">
+    Enviar
+    <i className="material-icons right">send</i>
+    </button>
+    </form>}
+    
+    </div>
+  </div>
+    )
+  }
+
     return(<>
+    {!l ? <Loader/> : 
       <div className="row">
         <div className="col s12">
-            {Cochera({name : "Cochera", id: "SG", tam: "col s6 m5"})}
-            {Entrada({name : "Entrada", id: "SE", tam: "col s6 m3"})}
-            {Patio({name : "Entrada", id: "SP", tam: "col s6 m4"})}
+            {Cochera({name : "Cochera", id: "CG", tam: "col s6 m4"})}
+            {Entrada({name : "Entrada", id: "CE", tam: "col s6 m4"})}
+            {Patio({name : "Patio", id: "CP", tam: "col s6 m4"})}
         </div>
+        {ModalPin()}
     </div>
+    }
 
      </>
     )
