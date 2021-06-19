@@ -144,6 +144,7 @@ const Unlock = props => {
               <div className="card">
                 <div className="card-image">
                   <img className="responsive-img" src={item.encendida ? garageOn : garageOff}/>
+                  <span className="card-title indigo-text text-darken-1"><b>{props.name}</b></span>
                 </div>
                 <div className="card-content center-align">
                 <div class="switch">
@@ -170,9 +171,10 @@ const Unlock = props => {
               <div className="card">
                 <div className="card-image">
                   <img className="responsive-img" src={item.encendida ? entradaOn : entradaOff}/>
+                  <span className="card-title indigo-text text-darken-1"><b>{props.name}</b></span>
                 </div>
                 <div className="card-content center-align">
-
+                  
                   <div class="switch">
                   <label>
                     OFF
@@ -198,6 +200,7 @@ const Unlock = props => {
               <div className="card">
                 <div className="card-image">
                   <img className="responsive-img"  src={item.encendida ? patioOn : patioOff}/>
+                  <span className="card-title indigo-text text-darken-1"><b>{props.name}</b></span>
                 </div>
                 <div className="card-content center-align">
                 <div class="switch">

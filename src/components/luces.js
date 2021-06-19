@@ -343,7 +343,7 @@ const Luces = props => {
   const BtnExtra = () => {
     return(
       <div className="fixed-action-btn">
-        <a className="btn-floating btn-large indigo darken-1">
+        <a className="btn-floating btn-large indigo darken-1 pulse">
           <i className="large material-icons">dialpad</i>
         </a>
         <ul>
