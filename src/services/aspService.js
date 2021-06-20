@@ -1,5 +1,5 @@
 import Config from "./serverConfig";
-const BU = Config.local;
+const BU = Config.dinamic;
 const T = Config.token;
 
 export default {
@@ -27,15 +27,17 @@ export default {
         .then(data => data)
     },
 
-    // todas : (orden) => {
-    //     return fetch(`${BU}/lucestodas/${orden}`,{
-    //         method : "POST",
-    //         headers : {
-    //             'Content-Type' : 'application/json'
-    //         }
-    //     }).then(res => res.json())
-    //     .then(data => data)
-    // },
+    programar : (asp,orden,time) => {
+        return fetch(`${BU}/pasp/${asp}/${orden}`,{
+            method : "POST",
+            body : JSON.stringify({ hora : time}),
+            headers : {
+                'Content-Type' : 'application/json',
+                'Authorization': T 
+            }
+        }).then(res => res.json())
+        .then(data => data)
+    },
 
     // programar : (luz,orden,time) => {
     //     return fetch(`${BU}/pluz/${luz}/${orden}`,{

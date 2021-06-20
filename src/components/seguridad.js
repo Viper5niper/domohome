@@ -2,12 +2,12 @@ import React, {useState, useEffect, useRef} from 'react';
 
 import cerrojosService from '../services/cerrojosService';
 
-import garageOn from './img/garage-open.svg';
-import garageOff from './img/garage-close.svg';
+import garageOn from './img/garage-open.png';//aaaa
+import garageOff from './img/garage-close.png';
 import entradaOn from './img/door.jpg';
 import entradaOff from './img/door-close.jpg';
-import patioOn from './img/patio-open.svg';
-import patioOff from './img/patio-close.svg';
+import patioOn from './img/patio-open.png';
+import patioOff from './img/patio-close.png';
 import ReactCodeInput from 'react-verification-code-input';
 import Loader from './subComps/loader';
 
@@ -149,11 +149,11 @@ const Unlock = props => {
                 <div className="card-content center-align">
                 <div class="switch">
                   <label>
-                    OFF
+                    CLOSE
                     <input name={props.id} type="checkbox" onChange={changeCerr}
                     checked={item.encendida}/>
                     <span className="lever"></span>
-                    ON
+                    OPEN
                   </label>
                 </div>
                 </div>
@@ -177,11 +177,11 @@ const Unlock = props => {
                   
                   <div class="switch">
                   <label>
-                    OFF
+                    CLOSE
                     <input name={props.id} type="checkbox" onChange={changeEntrada}
                     checked={item.encendida}/>
                     <span class="lever"></span>
-                    ON
+                    OPEN
                   </label>
                 </div>
 
@@ -205,11 +205,11 @@ const Unlock = props => {
                 <div className="card-content center-align">
                 <div class="switch">
                   <label>
-                    OFF
+                    CLOSE
                     <input name={props.id} type="checkbox" onChange={changeCerr}
                     checked={item.encendida}/>
                     <span class="lever"></span>
-                    ON
+                    OPEN
                   </label>
                 </div>
                 </div>

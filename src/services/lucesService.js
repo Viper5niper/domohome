@@ -1,5 +1,5 @@
 import Config from "./serverConfig";
-const BU = Config.local;
+const BU = Config.dinamic;
 const T = Config.token;
 
 export default {

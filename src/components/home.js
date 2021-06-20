@@ -1,8 +1,13 @@
-import React, {useContext, useEffect} from 'react';
+import React, {useContext, useEffect, useState} from 'react';
 import {Link} from 'react-router-dom';
 import Chart from 'bk-react-charts';
 import domot from '../img/domotica.png'
 import {AuthContext} from '../context/authContext';
+
+import M from "materialize-css";
+
+import cerrojosService from '../services/cerrojosService';
+import Loader from './subComps/loader';
 
 // import { Steps } from 'intro.js-react';
 
@@ -27,43 +32,75 @@ import {AuthContext} from '../context/authContext';
 const Home = () => {
 
     const {user,isAuth} = useContext(AuthContext);
+    const [l, setL] = useState(false);
 
+    const [cerrojos, setCerrojos] = useState([]);
 
     useEffect(() => {
-      // if(isAuth){
-      //   adminService.get().then(data => console.log(data));
-      // }
+      let elems = document.querySelectorAll('select');
+      M.FormSelect.init(elems);
+      
+      setL(false);
+
+      cerrojosService.get().then( res => {
+
+        if(!res.error){
+          
+          setCerrojos(res.data);
+          setL(true);
+          
+          let elems = document.querySelectorAll('select');
+          M.FormSelect.init(elems);
+
+        }
+
+      });
     },[]);
+
+    const onServidorChange = (e) => {
+      localStorage.setItem('remoteUrl',e.target.value);
+      console.log(e.target.value);
+    }
 
     const unAuthHome = () => {
         return(
-      <div className="pixelBG grey lighten-2">
+      
+      <div className="grey lighten-2">
           <br/><br/>
             <div className="row">
               <div className="col s12 m8 offset-m2">
                 <div className="card white">
                   <div className="card-content black-text">
-                    <h4 className="center-align"><b>Bienvenid@ A Domotica Con Proteus</b></h4>
+                    <h5 className="center-align"><b>Bienvenid@ A Domotica Con Proteus</b></h5>
+                    <div className="input-field col s12">
+                    <select name="tipo" onChange={onServidorChange}>
+                        <option value="http://localhost/xdt_domohome/public/" disabled selected>Seleccione una opcion:</option>
+                        <option value="http://localhost/xdt_domohome/public/">Local</option>
+                        <option value="https://bienvenido.xpertdt.xyz/web/public/index.php/">Remoto</option>
+                        <option value="https://bienvenido.xpertdt.xyz/public/index.php/">Pruebas</option>
+                    </select>
+                    <label>Elija un servidor</label>
+                  </div>
+                  <br/><br/><br/>
                 </div>
               </div>
             </div>
 
-              <div class="col s12 m8 offset-m2">
-              <div class="card horizontal">
-                <div class="card-image">
-                  <img src={domot}/>
+              <div className="col s12 m8 offset-m2">
+              <div className="card horizontal">
+                <div className="card-image">
+                  <img className="responsive-img" src={domot}/>
                 </div>
-                <div class="card-stacked">
-                  <div class="card-content">
+                <div className="card-stacked">
+                  <div className="card-content">
                     <h5><b>AQUI UN PEQUEÑO CONCEPTO SOBRE DOMOTICA</b></h5>
                     <br/>
                     <p style={{textAlign:'justify'}}>Se llama domótica a los sistemas capaces de automatizar una vivienda o edificación de cualquier tipo, 
                       aportando servicios de gestión energética, seguridad, bienestar y comunicación, y que pueden estar 
                       integrados por medio de redes interiores y exteriores de comunicación, cableadas o inalámbricas, 
-                      y cuyo control goza de cierta ubicuidad, desde dentro y fuera del hogar. Se podría definir como la 
-                      integración de la tecnología en el diseño inteligente de un recinto cerrado.</p>
+                      y cuyo control goza de cierta ubicuidad, desde dentro y fuera del hogar.</p>
                   </div>
-                  <div class="card-action">
+                  <div className="card-action">
                     <center><Link to='/Login' className="btn indigo darken-1">INGRESAR</Link></center>
                   </div>
                 </div>
@@ -90,12 +127,22 @@ const Home = () => {
     ]
 
     const AuthHome = (tipo) => {
-      return(<>
+      return(<>{ !l ? <Loader/> :
       <div className="row">
       <div className="col s12">
           <div className="card white" id="paso1">
             <div className="card-content black-text">
               <div className="card-title"><center><h5>BIENVENID@ A DOMOTICA CON PROTEUS</h5></center></div>
+              <div className="input-field col s12">
+                <select name="tipo" onChange={onServidorChange}>
+                    <option value="http://localhost/xdt_domohome/public/" disabled selected>Seleccione una opcion:</option>
+                    <option value="http://localhost/xdt_domohome/public/">Local</option>
+                    <option value="bienvenido.xpertdt.xyz/web/public/index.php/">Remoto</option>
+                    <option value="https://bienvenido.xpertdt.xyz/public/index.php/">Pruebas</option>
+                </select>
+                <label>Elija un servidor</label>
+              </div>
+              <br/><br/><br/>
             </div>
           </div>
         </div>
@@ -122,27 +169,21 @@ const Home = () => {
         <div className="col s5">
           <div className="card white">
             <div className="card-content black-text" id="paso3">
-              <div className="card-title"><h5>N° DE VECES QUE SE ABRIERON LAS PUERTAS</h5></div>
+              <div className="card-title"><h5>INGRESOS AL HOGAR</h5></div>
                 <table className="responsive-table">
                   <thead>
                     <tr>
                         <th>Puerta</th>
-                        <th>N° De Veces Que Se Abrio</th>
+                        <th>Veces Que Se Abrio</th>
                     </tr>
                   </thead>
                   <tbody>
-                    <tr>
-                      <td>Entrada Principal</td>
-                      <td>20</td>
-                    </tr>
-                    <tr>
-                      <td>Patio</td>
-                      <td>40</td>
-                    </tr>
-                    <tr>
-                      <td>Cochera</td>
-                      <td>5</td>
-                    </tr>
+                    {cerrojos.map( item => {
+                      return(<tr>
+                        <td>{item.name}</td>
+                        <td>{item.vabrir}</td>
+                      </tr>)
+                    })}
                   </tbody>
               </table>
             </div>
@@ -168,7 +209,7 @@ const Home = () => {
         /> */}
 
       </div>
-      </>)
+      }</>)
     }
 
     return(

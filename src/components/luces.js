@@ -46,7 +46,7 @@ labelYearSelect: 'Selecciona un año',
 weekdaysAbbrev: ['D','L','M','X','J','V','S'],
 };
 
-var LampOn, LampOff;
+var LampOn, LampOff, VentOn, VentOff;
 
 const Luces = props => {
 
@@ -57,7 +57,8 @@ const Luces = props => {
   const [l, setL] = useState(false);
   const [isProg, setIsProg] = useState(false);
 
-  const [pluz, setPluz] = useState({luz : "", orden : ""})
+  const [pluz, setPluz] = useState({luz : "", orden : ""});
+  const [pvent, setPvent] = useState({vent : "", orden : ""});
 
   const first = useRef(true);
 
@@ -67,9 +68,9 @@ const Luces = props => {
 
     if(!first.current){
 
-          let el = document.querySelector('.datepicker');
+          let el = document.querySelectorAll('.datepicker');
           M.Datepicker.init(el,{ defaultDate : Date.now(), setDefaultDate : true, i18n : spanishDates});
-          el = document.querySelector('.timepicker');
+          el = document.querySelectorAll('.timepicker');
           M.Timepicker.init(el,{ twelveHour : false});
 
           return;
@@ -78,6 +79,8 @@ const Luces = props => {
 
     LampOn = new Audio("./mp3/LampOn.mp3");
     LampOff = new Audio("./mp3/LampOff.mp3");
+    VentOn = new Audio("./mp3/VentOn.mp3");
+    VentOff = new Audio("./mp3/VentOff.mp3");
 
     ventsService.get().then( res =>{ //busqueda de vents
 
@@ -93,11 +96,11 @@ const Luces = props => {
           setELuces(res.data);
           setL(true);
           
-          var el = document.querySelector('.modal');
+          var el = document.querySelectorAll('.modal');
           M.Modal.init(el, {});
-          el = document.querySelector('.datepicker');
+          el = document.querySelectorAll('.datepicker');
           M.Datepicker.init(el,{ defaultDate : Date.now(), setDefaultDate : true, i18n : spanishDates});
-          el = document.querySelector('.timepicker');
+          el = document.querySelectorAll('.timepicker');
           M.Timepicker.init(el,{ twelveHour : false});
 
           var el = document.querySelectorAll('.fixed-action-btn');
@@ -118,10 +121,10 @@ const Luces = props => {
 
     var fecha, tiempo;
 
-    let ele = document.querySelector('.datepicker');
+    let ele = document.querySelector('#fecha');
     fecha = M.Datepicker.getInstance(ele).date;
 
-    ele = document.querySelector('.timepicker');
+    ele = document.querySelector('#hora');
     tiempo = M.Timepicker.getInstance(ele).time;
 
     var a = tiempo.split(':'); // split it at the colons
@@ -137,7 +140,42 @@ const Luces = props => {
         
         M.toast({html: res.message})
 
-        let ele = document.querySelector('.modal');
+        let ele = document.querySelector('#modal1');
+        let mdl = M.Modal.getInstance(ele);
+        mdl.close();
+      }
+
+    });
+
+    console.log(pluz);
+    //console.log(date.date);
+  }
+
+  const handleProgramarF = (e) => {
+    e.preventDefault();
+
+    var fecha, tiempo;
+
+    let ele = document.querySelector('#fechaF');
+    fecha = M.Datepicker.getInstance(ele).date;
+
+    ele = document.querySelector('#horaF');
+    tiempo = M.Timepicker.getInstance(ele).time;
+
+    var a = tiempo.split(':'); // split it at the colons
+    var seconds = (+a[0]) * 60 * 60 + (+a[1]) * 60; // minutes are worth 60 seconds. Hours are worth 60 minutes.
+    fecha.setSeconds( fecha.getHours() + seconds );
+    let timestamp = Math.floor(fecha.getTime() / 1000);
+
+    setIsProg(true);
+    ventsService.programar(pvent.vent, pvent.orden, timestamp).then(res => {
+
+      if(!res.error){
+        setIsProg(false);
+        
+        M.toast({html: res.message})
+
+        let ele = document.querySelector('#modalF');
         let mdl = M.Modal.getInstance(ele);
         mdl.close();
       }
@@ -199,6 +237,8 @@ const Luces = props => {
       if(!res.error){
 
         let filtered = eFans.filter( item => item.dkey !== res.newState.dkey );
+
+        res.newState.encendida ? VentOn.play() : VentOff.play();//reproducimos el sonido correspondiente
         
         setEFans([...filtered, res.newState]);//new state es el nuevo estado del foco devuelto por la api
         
@@ -214,7 +254,7 @@ const Luces = props => {
 
       if(!res.error){
 
-        opcion == 'E' ? LampOn.play() : LampOff.play();//reproducimos el sonido correspondiente
+        opcion == 'E' ? VentOn.play() : VentOff.play();//reproducimos el sonido correspondienteaa
 
         setEFans(res.newState);
 
@@ -258,6 +298,55 @@ const Luces = props => {
         <div className="input-field col s12 m6">
           <input id="fecha" type="text" className="datepicker" required/>
           <label htmlFor="fecha">Programar Fecha De Encendido/Apagado</label>
+        </div>
+
+    </div>
+    
+    <button className="waves-effect btn indigo darken-1" type="submit">
+    Programar accion
+    <i className="material-icons right">schedule_send</i>
+    </button>
+    </form>}
+    
+    </div>
+  </div>
+    )
+  }
+
+  const ModalProgramarF= () =>{
+
+    return(
+      
+    <div id="modalF" className="modal" style={{maxuHeight : '90%', height : '70%',  width : '70%'}}>
+    <div className="modal-content">
+    {isProg ? <Loader/> : 
+    <form onSubmit={handleProgramarF}>
+    <div className="row">
+
+        <blockquote>Elija la accion que desea programar en la ventilacion</blockquote>
+
+        <p className="col s12 m6"><label>
+            <input className="with-gap" name="orden" type="radio" onChange={(e) => setPvent({...pvent, orden : "E"})} required/>
+            <span>Encendido</span>
+        </label></p>
+        <p className="col s12 m6"><label>
+            <input className="with-gap" name="orden" type="radio"  onChange={(e) => setPvent({...pvent, orden : "A"})} required/>
+            <span>Apagado</span>
+        </label></p>
+
+    </div>
+
+    <div className="row">
+
+        <blockquote>Elija la fecha y hora a la que se debe ejecutar esa accion</blockquote>
+
+        <div className="input-field col s12 m6">
+          <input id="horaF" type="text" className="timepicker" required/>
+          <label htmlFor="horaF">Programar Hora De Encendido/Apagado</label>
+        </div>
+        <div className="input-field col s12 m6">
+          <input id="fechaF" type="text" className="datepicker" required/>
+          <label htmlFor="fechaF">Programar Fecha De Encendido/Apagado</label>
         </div>
 
     </div>
@@ -330,7 +419,8 @@ const Luces = props => {
                 </div>
 
                 <br/>
-                <a className="waves-effect indigo darken-1 btn modal-trigger" href="#modal1">
+                <a className="waves-effect indigo darken-1 btn modal-trigger" href="#modalF"
+                onClick={(e) => setPvent({...pvent, vent : props.id})}>
                 {props.name}
                 <i className="material-icons left">watch_later</i>
                 </a>
@@ -377,6 +467,7 @@ const Luces = props => {
           {Fan({name : "Cuarto 2", id: "VB", tam: "col s6 m4"})}
       </div>
       {ModalProgramar()}
+      {ModalProgramarF()}
       {BtnExtra()}
     </div>
 
