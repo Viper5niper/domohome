@@ -9,7 +9,7 @@ import Loader from './subComps/loader';
 
 import M from "materialize-css";
 
-
+var WaterOn, WaterOff;
 
 const spanishDates = {
   months: ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'],
@@ -39,6 +39,9 @@ const Aspersor = props => {
   const first = useRef(true);
 
     useEffect(() => {
+
+    WaterOn = new Audio("./mp3/WaterOn.mp3");
+    WaterOff = new Audio("./mp3/WaterOff.mp3");
 
     aspService.get().then( res =>{ //busqueda de luces
 
@@ -85,7 +88,7 @@ const Aspersor = props => {
 
         let filtered = eWater.filter( item => item.dkey !== res.newState.dkey );
         
-        //res.newState.encendida ? LampOn.play() : LampOff.play();//reproducimos el sonido correspondiente
+        res.newState.encendida ? WaterOn.play() : WaterOff.play();//reproducimos el sonido correspondiente
 
         setEWater([...filtered, res.newState]);//new state es el nuevo estado del foco devuelto por la api
         

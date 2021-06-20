@@ -13,6 +13,8 @@ import Loader from './subComps/loader';
 
 import M from "materialize-css";
 
+var DoorOn, DoorOff, GarageToggle, beep;
+
 const Unlock = props => {
 
   const [cerrojos, setCerrojos] = useState([]);
@@ -23,6 +25,12 @@ const Unlock = props => {
   const first = useRef(true);
 
   useEffect(() => {   
+
+      GarageToggle = new Audio("./mp3/GarageToggle.mp3");
+      DoorOn = new Audio("./mp3/DoorOn.mp3");
+      DoorOff = new Audio("./mp3/DoorOff.mp3");
+      beep = new Audio("./mp3/beep.mp3");
+
       cerrojosService.get().then( res => {
 
         if(!res.error){
@@ -60,7 +68,7 @@ const Unlock = props => {
 
         let filtered = cerrojos.filter( item => item.dkey !== res.newState.dkey );
         
-        //res.newState.encendida ? LampOn.play() : LampOff.play();//reproducimos el sonido correspondiente
+        GarageToggle.play();//reproducimos un sonido
 
         setCerrojos([...filtered, res.newState]);//new state es el nuevo estado del foco devuelto por la api
         
@@ -87,6 +95,7 @@ const Unlock = props => {
   
         if(!res.error){
           let filtered = cerrojos.filter( item => item.dkey !== res.newState.dkey );
+          DoorOff.play();
           setCerrojos([...filtered, res.newState]);//new state es el nuevo estado del foco devuelto por la api      
         }
       }) 
@@ -117,7 +126,7 @@ const Unlock = props => {
         
         let filtered = cerrojos.filter( item => item.dkey !== res.newState.dkey );
         
-        //res.newState.encendida ? LampOn.play() : LampOff.play();//reproducimos el sonido correspondiente
+        DoorOn.play();
 
         setCerrojos([...filtered, res.newState]);//new state es el nuevo estado del foco devuelto por la api
         
@@ -218,6 +227,13 @@ const Unlock = props => {
     )
   }
 
+  const PinHandle = (vals) => {
+
+    beep.play();
+    setEntrance({...entrance, code : vals});
+
+  }
+
   const ModalPin = () =>{
 
     return(
@@ -231,7 +247,7 @@ const Unlock = props => {
         <blockquote>Ingrese su pin secreto</blockquote>
 
         <ReactCodeInput fields={4} fieldWidth="58px" 
-        onChange={(vals)=> setEntrance({...entrance, code : vals})}/>
+        onChange={(vals)=> PinHandle(vals)}/>
     </div>
     <button className="waves-effect btn indigo darken-1" type="submit">
     Enviar
