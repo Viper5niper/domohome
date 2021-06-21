@@ -2,6 +2,8 @@ import React, {useContext, useEffect} from 'react';
 import {Link} from 'react-router-dom';
 import { LazyLog } from 'react-lazylog';
 
+import Config from "../services/serverConfig";
+
 const AppLog = () => {
 
     //const {user,isAuth} = useContext(AuthContext);
@@ -15,7 +17,7 @@ const AppLog = () => {
 
       return(<div style={{ height: 500, width: '100%' }}>
             <LazyLog follow caseInsensitive extraLines={1} enableSearch
-            url="https://bienvenido.xpertdt.xyz/public/index.php/getLog" />
+            url={Config.local + "getLog"} />
       </div>)
 
 }

@@ -137,7 +137,7 @@ const Home = () => {
                 <select name="tipo" onChange={onServidorChange}>
                     <option value="http://localhost/xdt_domohome/public/" disabled selected>Seleccione una opcion:</option>
                     <option value="http://localhost/xdt_domohome/public/">Local</option>
-                    <option value="bienvenido.xpertdt.xyz/web/public/index.php/">Remoto</option>
+                    <option value="https://bienvenido.xpertdt.xyz/web/public/index.php/">Remoto</option>
                     <option value="https://bienvenido.xpertdt.xyz/public/index.php/">Pruebas</option>
                 </select>
                 <label>Elija un servidor</label>

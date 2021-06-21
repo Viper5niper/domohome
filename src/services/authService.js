@@ -32,7 +32,7 @@ export default {
     },
 
     isAuth : async ()=> {
-        return fetch(/*baseUrl*/ 'https://bienvenido.xpertdt.xyz/public/index.php/' + 'checkAuth',  //siempre se comprobara la token en el server
+        return fetch(baseUrl + 'checkAuth',  //siempre se comprobara la token en el server
         {
             headers: {
             'Authorization': localStorage.getItem('token')

@@ -2,8 +2,8 @@ import React, {useState, useEffect, useRef} from 'react';
 
 import aspService from '../services/aspService';
 
-import sprinklerOn from './img/aspersor.gif';
-import sprinklerOff from './img/aspersor-off.gif';
+import sprinklerOn from '../img/aspersor.gif';
+import sprinklerOff from '../img/aspersor-off.gif';
 
 import Loader from './subComps/loader';
 

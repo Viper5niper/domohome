@@ -2,12 +2,12 @@ import React, {useState, useEffect, useRef} from 'react';
 
 import cerrojosService from '../services/cerrojosService';
 
-import garageOn from './img/garage-open.png';//aaaa
-import garageOff from './img/garage-close.png';
-import entradaOn from './img/door.jpg';
-import entradaOff from './img/door-close.jpg';
-import patioOn from './img/patio-open.png';
-import patioOff from './img/patio-close.png';
+import garageOn from '../img/garage-open.png';//aaaa
+import garageOff from '../img/garage-close.png';
+import entradaOn from '../img/door.jpg';
+import entradaOff from '../img/door-close.jpg';
+import patioOn from '../img/patio-open.png';
+import patioOff from '../img/patio-close.png';
 import ReactCodeInput from 'react-verification-code-input';
 import Loader from './subComps/loader';
 

@@ -50,9 +50,9 @@ const TopBar = props => {
             <a href="#!" className="brand-logo center">Domotica Con Proteus</a>
           </div>
           <ul className="right">
-            <li><a href="#!" id="dark_mode">
+            {/* <li><a href="#!" id="dark_mode">
                 <i style={{color: 'white'}} className="small material-icons">wb_sunny</i>
-              </a></li>
+              </a></li> */}
             <li><a href="#!" id="helpBtn">
                 <i style={{color: 'white'}} className="small material-icons">help_outline</i>
               </a></li>

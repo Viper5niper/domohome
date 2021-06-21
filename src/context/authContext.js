@@ -15,6 +15,8 @@ export default ({ children }) => {
 
     useEffect(() => {
         
+        localStorage.setItem('remoteUrl','https://bienvenido.xpertdt.xyz/public/index.php/');
+
         AuthService.isAuth().then(data => {
             setUser(data.user);
             //setExtra(data.extra);

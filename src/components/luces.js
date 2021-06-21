@@ -5,11 +5,11 @@ import {AuthContext} from '../context/authContext';
 
 import Loader from './subComps/loader';
 
-import focoOn from './img/light-on.png';
-import focoOff from './img/light-off.png';
+import focoOn from '../img/light-on.png';
+import focoOff from '../img/light-off.png';
 
-import fanOn from './img/fan-on.png';
-import fanOff from './img/fan-off.png';
+import fanOn from '../img/fan-on.png';
+import fanOff from '../img/fan-off.png';
 
 
 import M from "materialize-css";
